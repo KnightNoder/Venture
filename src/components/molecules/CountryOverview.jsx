@@ -3,7 +3,7 @@ import England1 from '../../assets/images/England1.png';
 
 const CountryOverview = () => {
   return (
-    <div className="flex flex-col p-10 mx-10 mt-20 overflow-hidden shadow-lg md:flex-row bg-red-50 md:mx-40 rounded-3xl">
+    <div className="flex flex-col px-2 mt-12 overflow-hidden shadow-lg md:mt-20 md:p-10 md:flex-row bg-red-50 md:mx-40 md:rounded-3xl">
       <div className="p-6 md:w-2/3">
         <h2 className="text-2xl font-bold text-red-600">England</h2>
         <p className="mt-3 leading-relaxed text-gray-700">
@@ -24,11 +24,11 @@ const CountryOverview = () => {
         </p>
       </div>
       {/* Image without padding, extending fully to the right, top, and bottom */}
-      <div className="h-auto md:w-1/3 md:h-full">
+      <div className="h-[250px] md:w-1/3 md:h-full">
         <img
           src={England1}
           alt="England Landscape"
-          className="object-cover w-full h-full rounded-r-3xl"
+          className="object-cover w-full h-full md:rounded-r-3xl"
         />
       </div>
     </div>

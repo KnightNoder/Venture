@@ -1,0 +1,28 @@
+<?php session_start(); ?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="module">
+import RefreshRuntime from "/@react-refresh"
+RefreshRuntime.injectIntoGlobalHook(window)
+window.$RefreshReg$ = () => {}
+window.$RefreshSig$ = () => (type) => type
+window.__vite_plugin_react_preamble_installed__ = true
+</script>
+
+    <script type="module" src="/@vite/client"></script>
+
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/Logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DrCloudEHR</title>
+  </head>
+  <body>
+  <form>
+    <input type="text" style="display: none;" name="patient_id" value="1004146">
+  </form>
+  
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx?t=1742474485014"></script>
+  </body>
+</html>
