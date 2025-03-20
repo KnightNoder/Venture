@@ -15,7 +15,7 @@ const AboutUs = () => {
         <Travel/>
         <FeaturesSection/>
         <PopularDestinations/>
-        <Footer/>
+        <ResponsiveFooter/>
     </div>
   )
 }

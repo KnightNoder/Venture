@@ -5,10 +5,10 @@ import Travel4 from "../../assets/images/Travel4.png";
 
 const TravelSection = ({ title }) => {
   return (
-    <section className="max-w-6xl px-6 py-12 mx-auto mt-[100px]">
+    <section className="max-w-6xl px-6 py-12 mx-auto md:mt-[100px]">
       {/* Heading */}
-      <div className="flex-col items-start justify-between mb-6 md:flex">
-        <div>
+      <div className="flex-col items-start justify-between hidden w-full mb-6 md:visible md:flex-row md:flex">
+        <div className="w-full md:max-w-1/2">
           <h2 className="text-2xl font-bold">Fall into travel</h2>
           <p className="max-w-full mt-1 text-gray-600">
             Going somewhere to celebrate this season? Whether you’re going home
@@ -54,10 +54,10 @@ const TravelSection = ({ title }) => {
 
         {/* Right Image Grid */}
         <div className="grid flex-1 grid-cols-2 gap-4">
-          <img src={Travel1} className="h-44 md:h-[30px] rounded-lg" alt="Travel 1" />
-          <img src={Travel2} className="h-44 md:h-[30px] rounded-lg" alt="Travel 2" />
-          <img src={Travel3} className="h-44 md:h-[30px] rounded-lg" alt="Travel 3" />
-          <img src={Travel4} className="h-44 md:h-[30px] rounded-lg" alt="Travel 4" />
+          <img src={Travel1} className="rounded-lg h-44 md:h-auto" alt="Travel 1" />
+          <img src={Travel2} className="rounded-lg h-44 md:h-auto" alt="Travel 2" />
+          <img src={Travel3} className="rounded-lg h-44 md:h-auto" alt="Travel 3" />
+          <img src={Travel4} className="rounded-lg h-44 md:h-auto" alt="Travel 4" />
         </div>
       </div>
     </section>

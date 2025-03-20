@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import Tourist1 from "../../assets/images/Tourist1.png";
 import Tourist2 from "../../assets/images/Tourist2.png";
 import Tourist3 from "../../assets/images/Tourist3.png";
@@ -79,13 +79,77 @@ const TouristAttractions = () => {
 
 
 
+
 const PopularPlaces = () => {
+  // Sample data for places
   const places = [
     { name: "Melbourne", price: 700, image: Tourist1 },
-    { name: "Paris", price: 600, image:  Tourist2},
-    { name: "London", price: 350, image:  Tourist3},
-    { name: "Columbia", price: 700, image:  Tourist4},
+    { name: "Paris", price: 600, image: Tourist2 },
+    { name: "London", price: 350, image: Tourist3 },
+    { name: "Columbia", price: 700, image: Tourist4 },
   ];
+
+  // State for tracking current slide in the carousel
+  const [currentSlide, setCurrentSlide] = useState(0);
+  // State to determine if we're on mobile view
+  const [isMobile, setIsMobile] = useState(false);
+  // Reference to the carousel container for touch events
+  const carouselRef = useRef(null);
+  // For tracking touch positions
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  // Check if we're on mobile view when component mounts
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkIsMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Clean up event listener
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  // Handle slide navigation
+  const goToSlide = (index) => {
+    // Make sure index stays within bounds
+    const newIndex = Math.max(0, Math.min(index, places.length - 1));
+    setCurrentSlide(newIndex);
+  };
+
+  const nextSlide = () => {
+    goToSlide(currentSlide + 1);
+  };
+
+  const prevSlide = () => {
+    goToSlide(currentSlide - 1);
+  };
+
+  // Touch event handlers for swipe functionality
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 50) {
+      // Swipe left, go to next slide
+      nextSlide();
+    }
+
+    if (touchStart - touchEnd < -50) {
+      // Swipe right, go to previous slide
+      prevSlide();
+    }
+  };
 
   return (
     <div className="px-5 py-10 md:px-36">
@@ -95,25 +159,105 @@ const PopularPlaces = () => {
           SEE ALL
         </button>
       </div>
-      <p className="mb-4 text-gray-600">Going somewhere to celebrate this season? Whether you’re going home or somewhere to roam, we’ve got the travel tools to get you to your destination.</p>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        {places.map((place, index) => (
-          <div key={index} className="relative overflow-hidden rounded-lg shadow-lg">
-            <img src={place.image} alt={place.name} className="object-cover w-full h-120" />
-            <div className="absolute bottom-0 left-0 w-full p-4 text-white bg-opacity-50">
-              <h3 className="text-lg font-bold">{place.name}</h3>
-              <p className="text-sm">Amazing journey</p>
-              <p className="text-lg font-semibold">${place.price}</p>
-              <button className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600">
-                BOOK FLIGHT
-              </button>
+      <p className="mb-4 text-gray-600">
+        Going somewhere to celebrate this season? Whether you're going home or somewhere to roam, 
+        we've got the travel tools to get you to your destination.
+      </p>
+
+      {isMobile ? (
+        // Mobile Carousel View
+        <div className="relative">
+          <div 
+            ref={carouselRef}
+            className="overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div 
+              className="flex transition-transform duration-300 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {places.map((place, index) => (
+                <div key={index} className="flex-shrink-0 w-full">
+                  <div className="relative m-1 overflow-hidden rounded-lg shadow-lg">
+                    <img src={place.image} alt={place.name} className="object-cover w-full h-[500px] " />
+                    <div className="absolute bottom-0 left-0 w-full text-white bg-transparent bg-opacity-50 px:20 md:p-4">
+                      <h3 className="text-lg font-bold">{place.name}</h3>
+                      <p className="text-sm">Amazing journey</p>
+                      <p className="text-lg font-semibold">${place.price}</p>
+                      <button className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
+                        BOOK FLIGHT
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* Navigation dots */}
+          <div className="flex justify-center mt-4">
+            {places.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 mx-1 rounded-full ${
+                  currentSlide === index ? 'bg-red-500' : 'bg-gray-300'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Navigation arrows */}
+          <button
+            className={`absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 ${
+              currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+            }`}
+            onClick={prevSlide}
+            disabled={currentSlide === 0}
+            aria-label="Previous slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            className={`absolute top-1/2 right-2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 ${
+              currentSlide === places.length - 1 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+            }`}
+            onClick={nextSlide}
+            disabled={currentSlide === places.length - 1}
+            aria-label="Next slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      ) : (
+        // Desktop Grid View (unchanged)
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          {places.map((place, index) => (
+            <div key={index} className="relative overflow-hidden rounded-lg shadow-lg">
+              <img src={place.image} alt={place.name} className="object-cover w-full h-[300px] md:h-[600px]" />
+              <div className="absolute bottom-0 left-0 w-full p-4 text-white bg-transparent bg-opacity-50">
+                <h3 className="text-lg font-bold">{place.name}</h3>
+                <p className="text-sm">Amazing journey</p>
+                <p className="text-lg font-semibold">${place.price}</p>
+                <button className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
+                  BOOK FLIGHT
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
+
 
 const TravelPage = () => {
   return (

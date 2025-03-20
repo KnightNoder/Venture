@@ -26,7 +26,7 @@ const LandingPage = () => {
       <GlobeComponent cities={cities} continent='Europe'/>
       <TravelSection title='Germany'/>
       <Testimonials/>
-      <Footer/>
+      <ResponsiveFooter/>
       </>
     )
 }

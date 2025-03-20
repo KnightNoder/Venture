@@ -9,6 +9,8 @@ import Footer from '../../molecules/Footer';
 import CountryOverview from '../../molecules/CountryOverview';
 import HistoryAndCulture from '../../molecules/HistoryAndCulture';
 import image from "../../../assets/images/EnglandCover.png";
+import DesktopTabletFooter from '../../molecules/DesktopFooter';
+import ResponsiveFooter from '../../molecules/ResponsiveFooter';
 
 
 const Destination = () => {
@@ -23,7 +25,7 @@ const Destination = () => {
       <HistoryAndCulture/>
       <TravelPage/>
       <TravelSection title={country}/>
-      <Footer/>
+      <ResponsiveFooter/>
     </>
   )
 }
