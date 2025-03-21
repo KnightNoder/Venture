@@ -6,12 +6,14 @@ import image from '../../../assets/images/AboutUs.png'
 import Travel from '../../organisms/Travel/Travel'
 import FeaturesSection from '../../molecules/FeatureSection'
 import PopularDestinations from '../../molecules/PopularDestinations'
+import ResponsiveFooter from '../../molecules/ResponsiveFooter';
+
 
 const AboutUs = () => {
   return (
     <div>
         <Header/>
-        <HeroSection title={"Contact us"} description={"Enjoy your holiday with us"} image={image}/>
+        <HeroSection title={"About us"} description={"Enjoy your holiday with us"} image={image}/>
         <Travel/>
         <FeaturesSection/>
         <PopularDestinations/>
