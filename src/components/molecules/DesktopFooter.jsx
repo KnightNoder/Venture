@@ -52,7 +52,7 @@ const DesktopTabletFooter = () => {
             <h3 className="mb-4 text-base font-bold">ABOUT</h3>
             <ul className="space-y-2">
               <li><a href="/about" className="text-sm text-[#8494a7] hover:text-white">About us</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Contact us</a></li>
+              <li><a href="/contact-us" className="text-sm text-[#8494a7] hover:text-white">Contact us</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Careers</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Privacy</a></li>
