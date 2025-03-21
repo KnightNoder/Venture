@@ -1,11 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const DesktopTabletFooter = () => {
+  const navigate = useNavigate();
   return (
     <footer className="bg-[#1a2639] text-white">
       {/* Main footer content */}
       <div className="container px-6 py-12 mx-auto">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-6 justify-items-center">
           {/* Logo and description column */}
           <div className="col-span-1">
             <div className="flex items-center mb-4">
@@ -49,7 +51,7 @@ const DesktopTabletFooter = () => {
           <div className="col-span-1">
             <h3 className="mb-4 text-base font-bold">ABOUT</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">About us</a></li>
+              <li><a href="/about" className="text-sm text-[#8494a7] hover:text-white">About us</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Contact us</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Careers</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms</a></li>
@@ -75,37 +77,35 @@ const DesktopTabletFooter = () => {
           </div>
 
           {/* Duplicate columns for the right side as shown in the image */}
-          <div className="hidden lg:block lg:col-span-1">
-            <div className="grid grid-cols-2 gap-8">
-              {/* Duplicated About section */}
-              <div>
-                <h3 className="mb-4 text-base font-bold">ABOUT</h3>
-                <ul className="space-y-2">
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">About us</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Contact us</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Careers</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Privacy</a></li>
-                </ul>
-              </div>
+          <div className="col-span-1">
+            <h3 className="mb-4 text-base font-bold">ABOUT</h3>
+            <ul className="space-y-2">
+              <li><a href="/about" className="text-sm text-[#8494a7] hover:text-white">About us</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Contact us</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Careers</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Privacy</a></li>
+            </ul>
+          </div>
 
-              {/* Duplicated Our Destinations section */}
-              <div>
-                <h3 className="mb-4 text-base font-bold">OUR DESTINATIONS</h3>
-                <ul className="space-y-2">
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Alaska</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Antarctic</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Canada</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Scotland</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Finland</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">France</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Greenland</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Faroe Islands</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Ireland</a></li>
-                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Iceland</a></li>
-                </ul>
-              </div>
-            </div>
+          {/* Our Destinations section */}
+          <div className="col-span-1">
+            <h3 className="mb-4 text-base font-bold">OUR DESTINATIONS</h3>
+            <ul className="space-y-2">
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Alaska</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Antarctic</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Canada</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Scotland</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Finland</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">France</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Greenland</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Faroe Islands</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Ireland</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Iceland</a></li>
+            </ul>
+          </div>
+
+          <div className="col-span-1">
           </div>
         </div>
       </div>

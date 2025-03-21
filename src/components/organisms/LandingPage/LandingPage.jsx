@@ -1,6 +1,6 @@
 import React from 'react'
 import HeroImage from '../../../assets/images/HeroImage.png'
-import Footer from '../../molecules/Footer'
+import ResponsiveFooter from '../../molecules/ResponsiveFooter'
 import WhyChooseUs from '../../molecules/HeroComponent'
 import HeroSection from '../../molecules/HeroImageComponent'
 import Testimonials from '../../molecules/Testimonials'
