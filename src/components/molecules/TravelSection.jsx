@@ -5,33 +5,20 @@ import Travel4 from "../../assets/images/Travel4.png";
 
 const TravelSection = ({ title }) => {
   return (
-    <section className="max-w-6xl px-6 py-12 mx-auto mt-[100px]">
+    <section className="max-w-6xl px-6 py-12 mx-auto md:mt-[100px]">
       {/* Heading */}
-      <div className="flex items-start justify-between mb-6">
-        <div>
+      <div className="flex-col items-start justify-between hidden w-full mb-6 md:visible md:flex-row md:flex">
+        <div className="w-full md:max-w-1/2">
           <h2 className="text-2xl font-bold">Fall into travel</h2>
-          <p className="max-w-md mt-1 text-gray-600">
+          <p className="max-w-full mt-1 text-gray-600">
             Going somewhere to celebrate this season? Whether you’re going home
             or somewhere to roam, we’ve got the travel tools to get you to your
             destination.
           </p>
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2 font-bold text-red-600 border border-red-600 rounded-md hover:bg-red-50">
+        <button className="flex items-center gap-2 px-4 py-1 mt-4 font-bold text-red-600 border border-red-600 rounded-md md:py-2 hover:bg-red-50">
           SEE ALL
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
         </button>
       </div>
 
@@ -60,17 +47,17 @@ const TravelSection = ({ title }) => {
           </p>
 
           {/* Button */}
-          <button className="w-full px-4 py-2 mt-32 font-bold text-red-500 bg-white rounded-md hover:text-red-700 hover:bg-red-100">
+          <button className="w-full px-4 py-2 mt-4 font-bold text-red-500 bg-white rounded-md md:mt-32 hover:text-red-700 hover:bg-red-100">
             BOOK FLIGHT
           </button>
         </div>
 
         {/* Right Image Grid */}
         <div className="grid flex-1 grid-cols-2 gap-4">
-          <img src={Travel1} className="rounded-lg" alt="Travel 1" />
-          <img src={Travel2} className="rounded-lg" alt="Travel 2" />
-          <img src={Travel3} className="rounded-lg" alt="Travel 3" />
-          <img src={Travel4} className="rounded-lg" alt="Travel 4" />
+          <img src={Travel1} className="rounded-lg h-44 md:h-auto" alt="Travel 1" />
+          <img src={Travel2} className="rounded-lg h-44 md:h-auto" alt="Travel 2" />
+          <img src={Travel3} className="rounded-lg h-44 md:h-auto" alt="Travel 3" />
+          <img src={Travel4} className="rounded-lg h-44 md:h-auto" alt="Travel 4" />
         </div>
       </div>
     </section>

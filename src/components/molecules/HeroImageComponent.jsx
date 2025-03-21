@@ -1,6 +1,5 @@
 
 const HeroSection = ({image, title, description }) => {
-  // Split title into two parts
   const words = title.split(" ");
   const midIndex = Math.ceil(words.length / 2);
   const firstLine = words.slice(0, midIndex).join(" ");
@@ -8,7 +7,7 @@ const HeroSection = ({image, title, description }) => {
 
   return (
     <div
-      className="relative w-full h-[700px] md:h-[600px] flex items-center justify-center text-white text-center"
+      className="relative w-full h-[300px] md:h-[600px] flex items-center justify-center text-white text-center"
       style={{
         backgroundImage: `url(${image})`,
         backgroundSize: "cover",

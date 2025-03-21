@@ -6,6 +6,7 @@ import HeroSection from '../../molecules/HeroImageComponent'
 import Testimonials from '../../molecules/Testimonials'
 import TravelSection from '../../molecules/TravelSection'
 import GlobeComponent from '../../molecules/GlobeComponent'
+import TestGlobe from '../../molecules/TestGlobe'
 import Header from '../../molecules/Header'
 
 
@@ -25,7 +26,7 @@ const LandingPage = () => {
       <GlobeComponent cities={cities} continent='Europe'/>
       <TravelSection title='Germany'/>
       <Testimonials/>
-      <Footer/>
+      <ResponsiveFooter/>
       </>
     )
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import Tourist1 from "../../assets/images/Tourist1.png";
 import Tourist2 from "../../assets/images/Tourist2.png";
 import Tourist3 from "../../assets/images/Tourist3.png";
@@ -6,7 +6,7 @@ import Tourist4 from "../../assets/images/Tourist4.png";
 
 const TouristAttractions = () => {
   return (
-    <div className="flex flex-col px-56 py-10 bg-red-50 md:px-56 md:flex-row md:items-center">
+    <div className="flex flex-col px-8 py-10 bg-red-50 md:px-56 md:flex-row md:items-center">
       {/* Left Content Section */}
       <div className="md:w-1/2">
         <h2 className="mb-4 text-3xl font-bold text-black">Tourist Attractions</h2>
@@ -20,8 +20,8 @@ const TouristAttractions = () => {
             "The Lake District: a national park in northwest England, known for its stunning lakes, mountains, and forests.",
             "Oxford University: a world-renowned university located in Oxford, known for its stunning architecture, beautiful gardens, and rich history."
           ].map((attraction, index) => (
-            <li key={index} className="flex items-baseline gap-3">
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <li key={index} className="flex items-center gap-3 md:items-baseline">
+              <svg width="35" height="35" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.38773 2.96643L4.95389 4.48196L7.93212 7.49271L4.95389 10.5034L6.38773 12.019L10.8652 7.49271L6.38773 2.96643ZM5.23635 4.47871L6.39098 3.25864L10.4791 7.3911H8.11744L5.23635 4.47871ZM5.23635 10.5067L8.11744 7.59431H10.4791L6.39098 11.7268L5.23635 10.5067Z" fill="#FF1B1C" stroke="#FF1B1C" stroke-width="0.406418"/>
                 <path d="M6.77037 1.23547C7.00366 1.20864 7.24141 1.19442 7.47754 1.1932L7.47713 0.98999C7.23044 0.990803 6.98699 1.00584 6.74721 1.03348L6.77037 1.23547Z" fill="#FF1B1C" stroke="#FF1B1C" stroke-width="0.406418"/>
                 <path d="M12.6456 11.4739C12.6728 11.4389 12.6996 11.4036 12.7261 11.3678C12.7265 11.367 12.7269 11.3666 12.7273 11.3658C12.7277 11.365 12.7281 11.3646 12.7289 11.3637C12.7305 11.3613 12.7326 11.3589 12.7342 11.3564C12.7342 11.356 12.7346 11.356 12.7346 11.3556C12.735 11.3552 12.735 11.3548 12.7354 11.3544C12.7358 11.354 12.7358 11.3536 12.7362 11.3532L12.7366 11.3524C12.737 11.352 12.7374 11.3516 12.7379 11.3512C12.7383 11.3507 12.7383 11.3507 12.7383 11.3503C12.7387 11.3499 12.7391 11.3495 12.7395 11.3487C12.7395 11.3487 12.7399 11.3483 12.7399 11.3479C12.7403 11.3475 12.7407 11.3471 12.7411 11.3463C12.7415 11.3459 12.7415 11.3459 12.7415 11.3455C12.7427 11.3438 12.7435 11.3426 12.7448 11.341L12.7452 11.3406C12.7456 11.3402 12.746 11.3394 12.7464 11.339C12.7464 11.339 12.7464 11.3386 12.7468 11.3386C12.7472 11.3381 12.7476 11.3373 12.748 11.3369C12.748 11.3369 12.748 11.3365 12.7484 11.3365C12.7488 11.3357 12.7492 11.3353 12.75 11.3345C12.7517 11.332 12.7533 11.33 12.7549 11.3276C12.8582 11.1861 12.9561 11.0406 13.0479 10.8911C13.0484 10.8903 13.0488 10.8895 13.0492 10.8886C13.0492 10.8886 13.0492 10.8882 13.0496 10.8882C13.05 10.8878 13.0504 10.887 13.0508 10.8866C13.0508 10.8866 13.0512 10.8862 13.0512 10.8858C13.0516 10.885 13.052 10.8846 13.0524 10.8838C13.0524 10.8838 13.0524 10.8834 13.0528 10.8834C13.0532 10.8826 13.0536 10.8817 13.054 10.8809C13.0545 10.8801 13.0549 10.8793 13.0557 10.8785C13.0557 10.8785 13.0561 10.8781 13.0561 10.8777C13.0565 10.8773 13.0569 10.8765 13.0569 10.876C13.0573 10.8756 13.0573 10.8752 13.0577 10.8748C13.0577 10.8744 13.0581 10.874 13.0585 10.874C13.0585 10.8736 13.0589 10.8732 13.0593 10.8728C13.0593 10.8724 13.0597 10.872 13.0601 10.872C13.0601 10.872 13.0605 10.8716 13.0605 10.8712L12.887 10.7655C12.7647 10.9663 12.6293 11.1626 12.4851 11.3487L12.6456 11.4739Z" fill="#FF1B1C" stroke="#FF1B1C" stroke-width="0.406418"/>
@@ -61,7 +61,7 @@ const TouristAttractions = () => {
       </div>
 
       {/* Right Image Section */}
-      <div className="grid grid-cols-2 gap-2 md:mt-0 md:w-1/2 md:grid-cols-2 md:pl-12">
+      <div className="grid grid-cols-2 gap-12 mt-6 md:gap-2 md:mt-0 md:w-1/2 md:grid-cols-2 md:pl-12">
         {[Tourist1, Tourist2, Tourist3, Tourist4].map((src, index) => (
           <img
             key={index}
@@ -79,13 +79,77 @@ const TouristAttractions = () => {
 
 
 
+
 const PopularPlaces = () => {
+  // Sample data for places
   const places = [
     { name: "Melbourne", price: 700, image: Tourist1 },
-    { name: "Paris", price: 600, image:  Tourist2},
-    { name: "London", price: 350, image:  Tourist3},
-    { name: "Columbia", price: 700, image:  Tourist4},
+    { name: "Paris", price: 600, image: Tourist2 },
+    { name: "London", price: 350, image: Tourist3 },
+    { name: "Columbia", price: 700, image: Tourist4 },
   ];
+
+  // State for tracking current slide in the carousel
+  const [currentSlide, setCurrentSlide] = useState(0);
+  // State to determine if we're on mobile view
+  const [isMobile, setIsMobile] = useState(false);
+  // Reference to the carousel container for touch events
+  const carouselRef = useRef(null);
+  // For tracking touch positions
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  // Check if we're on mobile view when component mounts
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkIsMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Clean up event listener
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  // Handle slide navigation
+  const goToSlide = (index) => {
+    // Make sure index stays within bounds
+    const newIndex = Math.max(0, Math.min(index, places.length - 1));
+    setCurrentSlide(newIndex);
+  };
+
+  const nextSlide = () => {
+    goToSlide(currentSlide + 1);
+  };
+
+  const prevSlide = () => {
+    goToSlide(currentSlide - 1);
+  };
+
+  // Touch event handlers for swipe functionality
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 50) {
+      // Swipe left, go to next slide
+      nextSlide();
+    }
+
+    if (touchStart - touchEnd < -50) {
+      // Swipe right, go to previous slide
+      prevSlide();
+    }
+  };
 
   return (
     <div className="px-5 py-10 md:px-36">
@@ -95,25 +159,105 @@ const PopularPlaces = () => {
           SEE ALL
         </button>
       </div>
-      <p className="mb-4 text-gray-600">Going somewhere to celebrate this season? Whether you’re going home or somewhere to roam, we’ve got the travel tools to get you to your destination.</p>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        {places.map((place, index) => (
-          <div key={index} className="relative overflow-hidden rounded-lg shadow-lg">
-            <img src={place.image} alt={place.name} className="object-cover w-full h-120" />
-            <div className="absolute bottom-0 left-0 w-full p-4 text-white bg-opacity-50">
-              <h3 className="text-lg font-bold">{place.name}</h3>
-              <p className="text-sm">Amazing journey</p>
-              <p className="text-lg font-semibold">${place.price}</p>
-              <button className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600">
-                BOOK FLIGHT
-              </button>
+      <p className="mb-4 text-gray-600">
+        Going somewhere to celebrate this season? Whether you're going home or somewhere to roam, 
+        we've got the travel tools to get you to your destination.
+      </p>
+
+      {isMobile ? (
+        // Mobile Carousel View
+        <div className="relative">
+          <div 
+            ref={carouselRef}
+            className="overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div 
+              className="flex transition-transform duration-300 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {places.map((place, index) => (
+                <div key={index} className="flex-shrink-0 w-full">
+                  <div className="relative m-1 overflow-hidden rounded-lg shadow-lg">
+                    <img src={place.image} alt={place.name} className="object-cover w-full h-[500px] " />
+                    <div className="absolute bottom-0 left-0 w-full text-white bg-transparent bg-opacity-50 px:20 md:p-4">
+                      <h3 className="text-lg font-bold">{place.name}</h3>
+                      <p className="text-sm">Amazing journey</p>
+                      <p className="text-lg font-semibold">${place.price}</p>
+                      <button className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
+                        BOOK FLIGHT
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* Navigation dots */}
+          <div className="flex justify-center mt-4">
+            {places.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 mx-1 rounded-full ${
+                  currentSlide === index ? 'bg-red-500' : 'bg-gray-300'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Navigation arrows */}
+          <button
+            className={`absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 ${
+              currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+            }`}
+            onClick={prevSlide}
+            disabled={currentSlide === 0}
+            aria-label="Previous slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            className={`absolute top-1/2 right-2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 ${
+              currentSlide === places.length - 1 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+            }`}
+            onClick={nextSlide}
+            disabled={currentSlide === places.length - 1}
+            aria-label="Next slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      ) : (
+        // Desktop Grid View (unchanged)
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          {places.map((place, index) => (
+            <div key={index} className="relative overflow-hidden rounded-lg shadow-lg">
+              <img src={place.image} alt={place.name} className="object-cover w-full h-[300px] md:h-[600px]" />
+              <div className="absolute bottom-0 left-0 w-full p-4 text-white bg-transparent bg-opacity-50">
+                <h3 className="text-lg font-bold">{place.name}</h3>
+                <p className="text-sm">Amazing journey</p>
+                <p className="text-lg font-semibold">${place.price}</p>
+                <button className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
+                  BOOK FLIGHT
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
+
 
 const TravelPage = () => {
   return (
