@@ -2,19 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import Globe from "globe.gl";
 
 const GlobeComponent = ({ cities, continent }) => {
-  // Add onHover handler for polygon countries
-  const onPolygonHover = (polygon) => {
-    if (polygon) {
-      setHighlightedCountry(polygon.properties.name);
-    } else {
-      setHighlightedCountry(null);
-    }
-  };
   const globeRef = useRef(null);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const globeInstanceRef = useRef(null);
   const [highlightedCountry, setHighlightedCountry] = useState(null);
+  const initialViewRef = useRef(null);
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -42,14 +35,14 @@ const GlobeComponent = ({ cities, continent }) => {
     const globe = Globe()(globeRef.current);
     globeInstanceRef.current = globe;
 
+    // Store initial view to return to when unhovered
+    initialViewRef.current = getContinentView(continent);
+
     globe
-      .globeImageUrl(
-        "//unpkg.com/three-globe/example/img/earth-night.jpg",
-      )
-      .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
-      .backgroundImageUrl("//cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png")
-      .backgroundColor("#000000")
-      .pointOfView(getContinentView(continent), 2000);
+      .globeImageUrl("https://unpkg.com/three-globe/example/img/earth-night.jpg")
+      .bumpImageUrl("https://unpkg.com/three-globe/example/img/earth-topology.png")
+      .backgroundColor("#000011")
+      .pointOfView(initialViewRef.current, 0);
 
     // More accurate GeoJSON data for European countries
     const countryData = [
@@ -183,8 +176,8 @@ const GlobeComponent = ({ cities, continent }) => {
       .polygonsData(polygonsData)
       .polygonCapColor((d) => 
         d.properties.name === highlightedCountry
-          ? "rgba(70, 130, 180, 0.9)" // steelblue when highlighted
-          : "rgba(0, 150, 255, 0.3)"
+          ? "rgba(255, 100, 100, 0.9)" // Red when highlighted
+          : "rgba(0, 150, 255, 0.3)"   // Blue for normal state
       )
       .polygonSideColor(() => "rgba(0, 100, 0, 0.15)") 
       .polygonStrokeColor(() => "#111")
@@ -206,7 +199,13 @@ const GlobeComponent = ({ cities, continent }) => {
           <div>Click to explore ${d.name}</div>
         </div>
       `)
-      .onPolygonHover(onPolygonHover)
+      .onPolygonHover((polygon) => {
+        if (polygon) {
+          setHighlightedCountry(polygon.properties.name);
+        } else {
+          setHighlightedCountry(null);
+        }
+      })
       .onPolygonClick((polygon) => {
         if (polygon && polygon.properties) {
           const country = polygon.properties.name;
@@ -229,10 +228,6 @@ const GlobeComponent = ({ cities, continent }) => {
       .onPointHover((point) => {
         if (point && point.country) {
           setHighlightedCountry(point.country);
-          globe.pointOfView(
-            { lat: point.lat, lng: point.lng, altitude: 1.5 },
-            1000,
-          );
         }
       })
       .labelsData(cities)
@@ -256,25 +251,17 @@ const GlobeComponent = ({ cities, continent }) => {
       globeInstanceRef.current
         .polygonCapColor((d) =>
           d.properties.name === highlightedCountry
-            ? "rgba(70, 130, 180, 0.9)"  // steelblue when highlighted
-            : "rgba(0, 150, 255, 0.3)",
+            ? "rgba(255, 100, 100, 0.9)"  // Red when highlighted (made more vivid)
+            : "rgba(0, 150, 255, 0.3)",   // Blue for normal state
         )
         .polygonAltitude((d) =>
           d.properties.name === highlightedCountry ? 0.12 : 0.06,
         );
       
-      // If a country is highlighted, find the corresponding city and focus the view
-      if (highlightedCountry) {
-        const highlightedCity = cities.find(city => city.country === highlightedCountry);
-        if (highlightedCity) {
-          globeInstanceRef.current.pointOfView(
-            { lat: highlightedCity.lat, lng: highlightedCity.lng, altitude: 1.8 },
-            1000
-          );
-        }
-      }
+      // IMPORTANT: Don't change the point of view when hovering
+      // This was causing the cursor to move away from the country
     }
-  }, [highlightedCountry, cities]);
+  }, [highlightedCountry]);
 
   return (
     <>
