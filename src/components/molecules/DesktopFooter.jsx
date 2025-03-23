@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icons from '../../assets/Icons/Icons';
+import Logo1 from '/home/enslapcon2/Travellers-Solution/src/assets/images/smallLogo .png'
+
 
 const DesktopTabletFooter = () => {
   const navigate = useNavigate();
@@ -12,9 +14,7 @@ const DesktopTabletFooter = () => {
           {/* Logo and description column */}
           <div className="col-span-1">
             <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full border-2 border-[#8494a7] flex items-center justify-center mr-3">
-                <span className="text-[#8494a7] text-xl font-bold">t</span>
-              </div>
+              <img src={Logo1 } className='w-15 h-15' alt="" srcset="" />
               <span className="text-[#8494a7] text-2xl font-medium">Traveler</span>
             </div>
             <p className="text-sm text-[#c9d0d9] leading-6 mb-6">

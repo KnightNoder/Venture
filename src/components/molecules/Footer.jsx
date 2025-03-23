@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import Icons from '../../assets/Icons/Icons';
+// import Logo from '../../assets/images/smallLogo.png'
+import Logo1 from '/home/enslapcon2/Travellers-Solution/src/assets/images/smallLogo .png'
+
 
 const MobileFooter = () => {
   // State to track which accordion sections are open
@@ -25,9 +28,7 @@ const MobileFooter = () => {
         {/* Logo and description */}
         <div className="mb-8">
           <div className="flex items-center mb-4">
-            <div className="w-12 h-12 rounded-full border-2 border-[#8494a7] flex items-center justify-center mr-3">
-              <span className="text-[#8494a7] text-2xl font-bold">t</span>
-            </div>
+            <img src={Logo1} className='w-10 h-10' alt="" srcset="" />
             <span className="text-[#8494a7] text-3xl font-medium">Traveler</span>
           </div>
           <p className="text-sm text-[#c9d0d9] leading-6">

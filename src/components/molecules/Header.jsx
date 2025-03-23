@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import Logo from '../../assets/images/Logo Sqaure.png'
+import Logo1 from '/home/enslapcon2/Travellers-Solution/src/assets/images/smallLogo .png'
+
 
 const Header = () => {
   const navigate = useNavigate();
@@ -56,20 +59,7 @@ const Header = () => {
           onClick={() => navigate('/')} 
           className="flex items-center space-x-2 text-lg font-bold text-blue-500 cursor-pointer md:ml-12 lg:ml-48"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
-            />
-          </svg>
+          <img className='w-20 h-10' src={Logo}></img>
           <span>Traveler</span>
         </div>
 
@@ -77,7 +67,7 @@ const Header = () => {
         <ul className="hidden space-x-6 text-sm font-medium text-gray-700 md:flex md:mr-12 lg:mr-48">
           <li onClick={() => navigate('/about')} className="cursor-pointer hover:text-blue-500">ABOUT</li>
           <li className="flex items-center cursor-pointer hover:text-blue-500">
-            SERVICES
+            OUR SERVICES
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -94,7 +84,7 @@ const Header = () => {
             </svg>
           </li>
           <li className="flex items-center cursor-pointer hover:text-blue-500">
-            TOURS
+            DESTINATIONS
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -111,7 +101,7 @@ const Header = () => {
             </svg>
           </li>
           <li className="flex items-center cursor-pointer hover:text-blue-500">
-            PACKAGES
+            TOURS AND PACKAGES
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -127,8 +117,7 @@ const Header = () => {
               />
             </svg>
           </li>
-          <li className="cursor-pointer hover:text-blue-500">NEWS</li>
-          <li className="cursor-pointer hover:text-blue-500">LUXURY</li>
+          <li onClick={()=>navigate('/contact-us')} className="cursor-pointer hover:text-blue-500">CONTACT US</li>
         </ul>
         
         {/* Mobile Menu Button */}
