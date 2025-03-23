@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Icons from '../../assets/Icons/Icons';
 // import Logo from '../../assets/images/smallLogo.png'
-import Logo1 from '/home/enslapcon2/Travellers-Solution/src/assets/images/smallLogo .png'
+import Logo1 from '../../assets/images/smallLogo.png'
 
 
 const MobileFooter = () => {

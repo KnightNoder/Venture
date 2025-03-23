@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Logo from '../../assets/images/Logo Sqaure.png'
-import Logo1 from '/home/enslapcon2/Travellers-Solution/src/assets/images/smallLogo .png'
 
 
 const Header = () => {
