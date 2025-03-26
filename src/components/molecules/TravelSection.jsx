@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import Travel1 from "../../assets/images/Travel1.png";
 import Travel2 from "../../assets/images/Travel2.png";
 import Travel3 from "../../assets/images/Travel3.png";
 import Travel4 from "../../assets/images/Travel4.png";
 
 const TravelSection = ({ title }) => {
+    const navigate = useNavigate()
+  
   return (
     <section className="max-w-6xl px-6 py-12 mx-auto md:mt-[100px]">
       {/* Heading */}
@@ -47,7 +50,7 @@ const TravelSection = ({ title }) => {
           </p>
 
           {/* Button */}
-          <button className="w-full px-4 py-2 mt-4 font-bold text-red-500 bg-white rounded-md md:mt-32 hover:text-red-700 hover:bg-red-100">
+          <button  onClick={()=> navigate('/contact-us')} className="w-full px-4 py-2 mt-4 font-bold text-red-500 bg-white rounded-md md:mt-32 hover:text-red-700 hover:bg-red-100">
             BOOK FLIGHT
           </button>
         </div>

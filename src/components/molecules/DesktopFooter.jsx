@@ -46,55 +46,33 @@ const DesktopTabletFooter = () => {
             <ul className="space-y-2">
               <li><a href="/about" className="text-sm text-[#8494a7] hover:text-white">About us</a></li>
               <li><a href="/contact-us" className="text-sm text-[#8494a7] hover:text-white">Contact us</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Careers</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Privacy</a></li>
             </ul>
           </div>
 
           {/* Our Destinations section */}
           <div className="col-span-1">
-            <h3 className="mb-4 text-base font-bold">OUR DESTINATIONS</h3>
+            <h3 className="mb-4 text-base font-bold">TOP DESTINATIONS</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Alaska</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Antarctic</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Canada</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">London</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Vienna</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Barcelona</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Scotland</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Finland</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">France</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Greenland</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Faroe Islands</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Ireland</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Iceland</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Paris</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Prague</a></li>
             </ul>
           </div>
 
           {/* Duplicate columns for the right side as shown in the image */}
-          <div className="col-span-1">
-            <h3 className="mb-4 text-base font-bold">ABOUT</h3>
-            <ul className="space-y-2">
-              <li><a href="/about" className="text-sm text-[#8494a7] hover:text-white">About us</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Contact us</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Careers</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Privacy</a></li>
-            </ul>
-          </div>
 
           {/* Our Destinations section */}
           <div className="col-span-1">
-            <h3 className="mb-4 text-base font-bold">OUR DESTINATIONS</h3>
+            <h3 className="mb-4 text-base font-bold">TOP TOURS</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Alaska</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Antarctic</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Canada</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Scotland</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Finland</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Sweden</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Spain</a></li>
               <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">France</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Greenland</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Faroe Islands</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Ireland</a></li>
-              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Iceland</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">United Kingdom</a></li>
+              <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Italy</a></li>
             </ul>
           </div>
 
@@ -104,7 +82,7 @@ const DesktopTabletFooter = () => {
       </div>
 
       {/* Bottom footer */}
-      <div className="bg-[#0f1525] py-4">
+      <div className="bg-[#05073C] py-8">
         <div className="container flex flex-col items-center justify-between px-6 mx-auto md:flex-row">
           <div>
             <p className="text-sm text-white">© Copyright 2022, All Rights Reserved</p>

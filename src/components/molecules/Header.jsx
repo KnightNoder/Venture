@@ -59,7 +59,6 @@ const Header = () => {
           className="flex items-center space-x-2 text-lg font-bold text-blue-500 cursor-pointer md:ml-12 lg:ml-48"
         >
           <img className='w-20 h-10' src={Logo}></img>
-          <span>Traveler</span>
         </div>
 
         {/* Desktop Menu */}

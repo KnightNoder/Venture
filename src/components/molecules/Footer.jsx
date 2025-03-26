@@ -76,9 +76,6 @@ const MobileFooter = () => {
               <div className="mt-3 space-y-2">
                 <a href="/about" className="block text-[#8494a7] hover:text-white">About us</a>
                 <a href="/contact-us" className="block text-[#8494a7] hover:text-white">Contact us</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Careers</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Terms</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Privacy</a>
               </div>
             )}
           </div>
@@ -101,16 +98,14 @@ const MobileFooter = () => {
             </button>
             {openSections.destinations && (
               <div className="mt-3 space-y-2">
-                <a href="#" className="block text-[#8494a7] hover:text-white">Alaska</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Antarctic</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Canada</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Scotland</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Finland</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">France</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Greenland</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Faroe Islands</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Ireland</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Iceland</a>
+                <ul className="space-y-2">
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">London</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Vienna</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Barcelona</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Scotland</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Paris</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Prague</a></li>
+                </ul>
               </div>
             )}
           </div>
@@ -133,16 +128,19 @@ const MobileFooter = () => {
             </button>
             {openSections.industries && (
               <div className="mt-3 space-y-2">
-                <a href="#" className="block text-[#8494a7] hover:text-white">Adventure</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Culinary</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Cruise</a>
-                <a href="#" className="block text-[#8494a7] hover:text-white">Cultural</a>
+                <ul className="space-y-2">
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Sweden</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Spain</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">France</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">United Kingdom</a></li>
+                  <li><a href="#" className="text-sm text-[#8494a7] hover:text-white">Italy</a></li>
+                </ul>
               </div>
             )}
           </div>
 
           {/* RESOURCES Section */}
-          <div className="border-b border-[#3b4a5f] pb-4">
+          {/* <div className="border-b border-[#3b4a5f] pb-4">
             <button 
               className="flex items-center justify-between w-full"
               onClick={() => toggleSection('resources')}
@@ -165,12 +163,12 @@ const MobileFooter = () => {
                 <a href="#" className="block text-[#8494a7] hover:text-white">Help Center</a>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 
       {/* Bottom footer */}
-      <div className="bg-[#0f1525] py-6 px-6">
+      <div className="bg-[#05073C] py-6 px-6">
         <div className="mb-4">
           <p className="text-sm text-center">© Copyright 2022, All Rights Reserved</p>
         </div>

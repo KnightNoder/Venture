@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AboutParis from '../../assets/images/AboutParis.png';
 import AboutSwiss from '../../assets/images/AboutSwiss.png';
 import AboutThailand from '../../assets/images/AboutThailand.png';
@@ -8,6 +9,7 @@ import AboutSingapore from '../../assets/images/AboutSingapore.png';
 
 export default function PopularDestinations() {
   // Define our destinations data
+  const navigate = useNavigate()
   const destinations = [
     { name: "Paris", image: AboutParis },
     { name: "Swiss", image: AboutSwiss },
@@ -154,7 +156,7 @@ export default function PopularDestinations() {
                           </svg>
                         ))}
                       </div>
-                      <button className="w-full py-2 mt-4 text-red-500 transition border border-red-500 rounded hover:bg-red-500 hover:text-white">
+                      <button  onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-4 text-red-500 transition border border-red-500 rounded hover:bg-red-500 hover:text-white">
                         BOOK NOW
                       </button>
                     </div>
