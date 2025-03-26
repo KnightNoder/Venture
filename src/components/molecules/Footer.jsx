@@ -86,7 +86,7 @@ const MobileFooter = () => {
               className="flex items-center justify-between w-full"
               onClick={() => toggleSection('destinations')}
             >
-              <h3 className="text-lg font-bold">OUR DESTINATIONS</h3>
+              <h3 className="text-lg font-bold">TOP DESTINATIONS</h3>
               <svg 
                 className={`w-6 h-6 transform ${openSections.destinations ? 'rotate-180' : ''}`} 
                 fill="none" 
@@ -116,7 +116,7 @@ const MobileFooter = () => {
               className="flex items-center justify-between w-full"
               onClick={() => toggleSection('industries')}
             >
-              <h3 className="text-lg font-bold">INDUSTRIES</h3>
+              <h3 className="text-lg font-bold">TOP TOURS</h3>
               <svg 
                 className={`w-6 h-6 transform ${openSections.industries ? 'rotate-180' : ''}`} 
                 fill="none" 

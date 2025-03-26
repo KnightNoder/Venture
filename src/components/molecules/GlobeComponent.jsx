@@ -60,7 +60,7 @@ const [backgroundImage, setBackgroundImage] = useState(countryBackgrounds['defau
     globeInstanceRef.current = globe;
 
     // Set focused view on Europe
-    const europeView = { lat: 48, lng: 10, altitude: 0.75 };
+    const europeView = { lat: 44, lng: 10, altitude: 0.75 };
 
     // Make the globe completely transparent with a transparent background
     globe
