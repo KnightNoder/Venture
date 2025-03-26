@@ -7,6 +7,9 @@ import Testimonials from '../../molecules/Testimonials'
 import TravelSection from '../../molecules/TravelSection'
 // import CustomGlobe from '../../molecules/CustomGlobe'
 import Header from '../../molecules/Header'
+import EuropeanMapComponent from '../../molecules/MapComponent'
+import EuropeanMapComponent2 from '../../molecules/LeafletMap'
+import EuropeanMapComponent3 from '../../molecules/LeafletMap2'
 import GlobeComponent from '../../molecules/GlobeComponent';
 
 const LandingPage = () => {
@@ -38,6 +41,9 @@ const LandingPage = () => {
         </div>
       </section> */}
       <GlobeComponent cities={europeanCities} continent="Europe"/>
+      {/* <EuropeanMapComponent/> */}
+      {/* <EuropeanMapComponent2/> */}
+      {/* <EuropeanMapComponent3/> */}
       <TravelSection title='Germany'/>
       <Testimonials/>
       <ResponsiveFooter/>

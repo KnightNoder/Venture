@@ -1,13 +1,37 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react"
 import Globe from "globe.gl";
+import europeGeoJSON from './geoJson.json'; // Import your Natural Earth GeoJSON file
 
-const GlobeComponent = ({ cities, continent }) => {
+const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const globeRef = useRef(null);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const globeInstanceRef = useRef(null);
   const [highlightedCountry, setHighlightedCountry] = useState(null);
-  const initialViewRef = useRef(null);
+
+
+  // Define only the countries we want to be visible
+  const visibleCountries = ['France', 'Germany', 'Spain', 'Italy'];
+
+  // Define country-specific colors
+  const countryColors = {
+    'France': 'rgba(41, 128, 185, 0)',  // Blue (Transparent)
+    'Germany': 'rgba(142, 68, 173, 0)', // Purple (Transparent)
+    'Italy': 'rgba(39, 174, 96, 0)',    // Green (Transparent)
+    'Spain': 'rgba(192, 57, 43, 0)'     // Red (Transparent)
+  };
+  
+  // Define background images for each country
+  const countryBackgrounds = {
+    'France': 'url(https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop)', // Paris
+    'Germany': 'url(https://images.unsplash.com/photo-1599946347371-68eb71b16afc?q=80&w=2073&auto=format&fit=crop)', // Berlin
+    'Italy': 'url(https://images.unsplash.com/photo-1529260830199-42c24126f198?q=80&w=2076&auto=format&fit=crop)',   // Rome
+    'Spain': 'url(https://images.unsplash.com/photo-1539037116277-4db20889f2d4?q=80&w=2070&auto=format&fit=crop)',   // Madrid
+    'default': 'url(https://images.unsplash.com/photo-1519677100203-a0e668c92439?q=80&w=2070&auto=format&fit=crop)'  // Default Europe
+  };
+
+const [backgroundImage, setBackgroundImage] = useState(countryBackgrounds['default'])
+
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -35,231 +59,183 @@ const GlobeComponent = ({ cities, continent }) => {
     const globe = Globe()(globeRef.current);
     globeInstanceRef.current = globe;
 
-    // Store initial view to return to when unhovered
-    initialViewRef.current = getContinentView(continent);
+    // Set focused view on Europe
+    const europeView = { lat: 48, lng: 10, altitude: 0.75 };
 
+    // Make the globe completely transparent with a transparent background
     globe
-      .globeImageUrl("https://unpkg.com/three-globe/example/img/earth-night.jpg")
-      .bumpImageUrl("https://unpkg.com/three-globe/example/img/earth-topology.png")
-      .backgroundColor("#000011")
-      .pointOfView(initialViewRef.current, 0);
+      .globeImageUrl("") // No image for the globe
+      .backgroundColor("rgba(0, 0, 0, 0)") // Transparent background
+      .pointOfView(europeView, 100) // Smooth transition to Europe view
+      .showGlobe(false) // Hide the globe sphere completely
+      .showAtmosphere(false); // No atmosphere
+      
+    // Enable custom bounds for the globe view
+    globe.controls().autoRotate = false;
+    globe.controls().enableZoom = true;
+    globe.controls().minDistance = 90; // Prevent zooming out too far
+    globe.controls().maxDistance = 500; // Prevent zooming in too far
+    
+    // Allow full rotation in all directions
+    const controls = globe.controls();
+    
+    // Remove rotation restrictions
+    controls.minPolarAngle = 0;
+    controls.maxPolarAngle = Math.PI;
+    
+    // Allow full azimuthal rotation
+    controls.minAzimuthAngle = -Infinity;
+    controls.maxAzimuthAngle = Infinity;
 
-    // More accurate GeoJSON data for European countries
-    const countryData = [
-      {
-        id: "france",
-        name: "France",
-        lat: 46.603354,
-        lng: 1.888334,
-        coordinates: [
-          [
-            [-4.7913, 48.2261], // Brittany north coast
-            [-2.0964, 49.3677], // Normandy coast
-            [1.5664, 50.9848], // Belgian border
-            [2.6621, 51.0793], // Northeast corner
-            [8.2297, 48.9501], // Eastern border with Germany
-            [7.5366, 47.6009], // Swiss border
-            [6.8022, 45.9261], // Alpine border
-            [7.7191, 43.7196], // Italian border
-            [7.4316, 43.7495], // Monaco coast
-            [4.8331, 43.3852], // Mediterranean coast
-            [3.0762, 42.4149], // Spanish border
-            [-1.7847, 43.3626], // Western Pyrenees
-            [-1.0778, 45.5811], // Bay of Biscay coast
-            [-4.7913, 48.2261]  // Back to start
-          ]
-        ]
-      },
-      {
-        id: "germany",
-        name: "Germany",
-        lat: 51.165691,
-        lng: 10.451526,
-        coordinates: [
-          [
-            [8.1567, 54.9079], // Northern coast
-            [9.4456, 54.8204], // Baltic Sea coast
-            [10.9831, 54.3803], // Baltic coast east
-            [13.6392, 54.0756], // Polish border north
-            [14.5703, 53.9324], // Polish border northeast
-            [14.6406, 51.9496], // Polish border east
-            [14.8371, 50.8661], // Czech border northeast
-            [12.4033, 50.1679], // Czech border southeast
-            [13.0330, 49.0392], // Czech border south
-            [12.2180, 47.7039], // Austrian border
-            [10.1788, 47.2742], // Alpine border
-            [8.5254, 47.5706], // Swiss border
-            [7.5894, 47.5840], // French border south
-            [6.1377, 49.4633], // Luxembourg border
-            [6.0425, 50.6401], // Belgian border
-            [5.8658, 51.0535], // Dutch border
-            [6.8967, 53.4769], // North Sea coast
-            [8.1567, 54.9079]  // Back to start
-          ]
-        ]
-      },
-      {
-        id: "italy",
-        name: "Italy",
-        lat: 41.87194,
-        lng: 12.56738,
-        coordinates: [
-          [
-            [13.8062, 46.5088], // Austrian border
-            [13.5938, 46.4324], // Slovenian border
-            [13.7134, 45.6388], // Trieste area
-            [12.4390, 45.4219], // Venice area
-            [12.3346, 44.4938], // Adriatic coast
-            [13.7080, 42.4614], // Central Adriatic
-            [14.7852, 41.9022], // East coast
-            [15.8574, 41.1748], // Southeast corner
-            [16.9189, 40.8380], // Southeast coast
-            [17.9590, 40.6336], // Heel of the boot
-            [18.4204, 40.1049], // Bottom of heel
-            [17.4463, 40.1477], // Gulf of Taranto
-            [16.5332, 39.0531], // Calabria
-            [15.9082, 38.2431], // Strait of Messina
-            [15.1050, 38.0297], // Sicily north coast
-            [13.2373, 37.5029], // Sicily west coast
-            [12.4390, 37.8023], // Sicily southwest
-            [12.0703, 38.2977], // Sicily northwest
-            [12.6465, 38.3239], // Back to Sicily north
-            [15.6299, 38.2592], // Back to mainland
-            [14.1943, 40.8512], // Tyrrhenian coast
-            [12.3960, 41.8850], // Rome area
-            [10.3564, 43.7247], // Tuscany coast
-            [8.8330, 44.4063], // Ligurian coast
-            [7.5894, 43.9336], // French border
-            [6.9873, 45.8287], // Alpine border with France
-            [7.8564, 45.9177], // Alpine border with Switzerland
-            [10.4956, 46.5384], // Alpine border
-            [12.2092, 46.7321], // Dolomites
-            [13.8062, 46.5088]  // Back to start
-          ]
-        ]
-      },
-      {
-        id: "spain",
-        name: "Spain",
-        lat: 40.463667,
-        lng: -3.74922,
-        coordinates: [
-          [
-            [-9.3018, 43.3626], // Northwest corner (Galicia)
-            [-8.3081, 43.7792], // North coast
-            [-3.1729, 43.5996], // Bilbao area
-            [-1.7847, 43.3626], // French border
-            [3.3223, 42.4491], // Mediterranean border with France
-            [3.2080, 41.8910], // Costa Brava
-            [2.1973, 41.3851], // Barcelona area
-            [0.7910, 40.8905], // East coast
-            [-0.1318, 39.4699], // Valencia area
-            [-0.7471, 38.3413], // Alicante area
-            [-4.7473, 36.7212], // Costa del Sol
-            [-5.6134, 36.0126], // Strait of Gibraltar
-            [-7.5234, 37.2435], // Portuguese border south
-            [-7.0312, 38.7100], // Portuguese border central
-            [-6.9873, 41.9022], // Portuguese border north
-            [-8.6768, 42.2803], // Northwest coast
-            [-9.3018, 43.3626]  // Back to start
-          ]
-        ]
+    // Process the GeoJSON data
+    const getCountryName = (feature) => {
+      return feature.properties.NAME || 
+             feature.properties.name || 
+             feature.properties.ADMIN ||
+             feature.properties.NAME_LONG ||
+             '';
+    };
+
+    // Filter GeoJSON to ONLY include the four visible countries
+    const filteredGeoJSON = {
+      type: "FeatureCollection",
+      features: europeGeoJSON.features.filter(feature => {
+        const countryName = getCountryName(feature);
+        return visibleCountries.includes(countryName);
+      })
+    };
+
+    // Convert GeoJSON to the format expected by Globe.gl
+    const polygonsData = filteredGeoJSON.features.map(feature => {
+      const countryName = getCountryName(feature);
+      return {
+        properties: { 
+          name: countryName,
+          id: countryName.toLowerCase()
+        },
+        geometry: feature.geometry
+      };
+    });
+
+    // Function to get country color
+    const getCountryColor = (d) => {
+      // If country is highlighted, return highlight color
+      if (d.properties.name === highlightedCountry) {
+        return "rgba(255, 140, 0, 0.9)"; // Red when highlighted
       }
-    ];
+      
+      // Otherwise return the country-specific color
+      return countryColors[d.properties.name];
+    };
 
-    const polygonsData = countryData.map((country) => ({
-      properties: { name: country.name, id: country.id },
-      geometry: { type: "Polygon", coordinates: country.coordinates },
-    }));
+    // Altitude settings for 3D effect
+    const getCountryAltitude = (d) => {
+      return d.properties.name === highlightedCountry ? 0.15 : 0.06;
+    };
 
     globe
       .polygonsData(polygonsData)
-      .polygonCapColor((d) => 
-        d.properties.name === highlightedCountry
-          ? "rgba(255, 100, 100, 0.9)" // Red when highlighted
-          : "rgba(0, 150, 255, 0.3)"   // Blue for normal state
-      )
-      .polygonSideColor(() => "rgba(0, 100, 0, 0.15)") 
-      .polygonStrokeColor(() => "#111")
-      .polygonAltitude((d) =>
-        d.properties.name === highlightedCountry ? 0.12 : 0.06
-      )
+      .polygonCapColor(getCountryColor)
+      .polygonSideColor(() => "rgba(189, 195, 199, 0.2)") // Brighter sides
+      .polygonStrokeColor(() => "rgba(236, 240, 241, 0.8)") // White borders
+      .polygonAltitude(getCountryAltitude)
       .polygonsTransitionDuration(300) // smooth transition
       .polygonLabel(({ properties: d }) => `
         <div style="
-          background-color: rgba(0, 0, 0, 0.75);
+          background-color: rgba(0, 0, 0, 0.85);
           color: white;
           padding: 10px;
           border-radius: 5px;
           font-family: Arial, sans-serif;
           font-size: 14px;
           line-height: 1.4;
+          border: 1px solid ${countryColors[d.name]};
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         ">
-          <div><b>${d.name}</b></div>
+          <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">${d.name}</div>
           <div>Click to explore ${d.name}</div>
         </div>
       `)
       .onPolygonHover((polygon) => {
         if (polygon) {
-          setHighlightedCountry(polygon.properties.name);
+          const countryName = polygon.properties.name;
+          setHighlightedCountry(countryName);
+          // Update background image based on hovered country
+          setBackgroundImage(countryBackgrounds[countryName] || countryBackgrounds['default']);
         } else {
           setHighlightedCountry(null);
+          // Reset to default background when not hovering any country
+          setBackgroundImage(countryBackgrounds['default']);
         }
       })
       .onPolygonClick((polygon) => {
         if (polygon && polygon.properties) {
           const country = polygon.properties.name;
-          const targetCity = cities.find(city => city.country === country);
+          const targetCity = cities?.find(city => city.country === country);
           if (targetCity && targetCity.url) {
             window.open(targetCity.url, "_blank");
           }
         }
       });
 
-    // City markers with glowing effect
-    globe
-      .pointsData(cities)
-      .pointAltitude(0.07) // Slightly higher than countries
-      .pointColor(() => "#FFD700") // Gold color
-      .pointRadius(() => 0.5)
-      .pointResolution(15) // Makes the dots look smoother
-      .pointsMerge(true) // More efficient rendering
-      .onPointClick(({ url }) => window.open(url, "_blank"))
-      .onPointHover((point) => {
-        if (point && point.country) {
-          setHighlightedCountry(point.country);
-        }
-      })
-      .labelsData(cities)
-      .labelText("name")
-      .labelSize(1.5)
-      .labelColor(() => "white")
-      .labelResolution(2)
-      .labelAltitude(0.01) // Add some depth to labels
-      .labelDotRadius(0.3) // Add dot connector
-      .labelDotOrientation(() => 'bottom');
+    // Add city markers if cities are provided
+    if (cities && cities.length > 0) {
+      // Filter to only include cities from the four visible countries
+      const visibleCities = cities.filter(city => 
+        visibleCountries.includes(city.country)
+      );
+      
+      globe
+        .pointsData(visibleCities)
+        .pointAltitude(0.001)
+        .pointRadius(0.5)
+        .pointResolution(1)
+        .pointsMerge(true)
+        .onPointClick(({ url }) => window.open(url, "_blank"))
+        .onPointHover((point) => {
+          if (point && point.country) {
+            const countryName = point.country;
+            setHighlightedCountry(countryName);
+            // Change globe background instead of point color
+            const newBackground = countryBackgrounds[countryName] || countryBackgrounds['default'];
+            globe.backgroundImage(newBackground);
+          }
+        })
+        .labelsData(visibleCities)
+        .labelText("name")
+        .labelSize(d => d.country === highlightedCountry ? 2.0 : 1.5)
+        .labelColor("#DDDDDD")
+        .labelResolution(2)
+        .labelAltitude(0.01)
+        .labelDotRadius(d => d.country === highlightedCountry ? 0.5 : 0.3)
+        .labelDotOrientation(() => 'bottom');
+
+    }
 
     return () => {
       if (globeInstanceRef.current) {
         globeInstanceRef.current._destructor();
       }
     };
-  }, [cities, continent]);
+  }, [cities]);
 
   useEffect(() => {
     if (globeInstanceRef.current) {
+      // Update visual elements when highlighted country changes
       globeInstanceRef.current
-        .polygonCapColor((d) =>
-          d.properties.name === highlightedCountry
-            ? "rgba(255, 100, 100, 0.9)"  // Red when highlighted (made more vivid)
-            : "rgba(0, 150, 255, 0.3)",   // Blue for normal state
-        )
-        .polygonAltitude((d) =>
-          d.properties.name === highlightedCountry ? 0.12 : 0.06,
-        );
-      
-      // IMPORTANT: Don't change the point of view when hovering
-      // This was causing the cursor to move away from the country
+        .polygonCapColor((d) => {
+          if (d.properties.name === highlightedCountry) {
+            return "rgba(255, 255, 255, 0.15)";
+          }
+          return countryColors[d.properties.name];
+        })
+        .polygonAltitude((d) => d.properties.name === highlightedCountry ? 0.15 : 0.06)
+        .pointAltitude(d => d.country === highlightedCountry ? 0.18 : 0.09)
+        .pointColor(d => d.country === highlightedCountry ? "#FFDD00CC" : "#FFD70080")
+        .pointRadius(d => d.country === highlightedCountry ? 0.8 : 0.5)
+        .labelSize(d => d.country === highlightedCountry ? 2.0 : 1.5)
+        .labelColor(d => d.country === highlightedCountry ? "#FFFFFF" : "#DDDDDD")
+        .labelDotRadius(d => d.country === highlightedCountry ? 0.5 : 0.3);
     }
   }, [highlightedCountry]);
 
@@ -267,11 +243,52 @@ const GlobeComponent = ({ cities, continent }) => {
     <>
       <div
         ref={containerRef}
-        className="w-full"
-        style={{ height: dimensions.height }}
+        className="relative w-full"
+        style={{ 
+          height: dimensions.height,
+        }}
       >
+        {/* Background image container with transition effect */}
+        <div 
+          className="absolute inset-0 z-0" 
+          style={{
+            backgroundImage: backgroundImage,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            transition: 'all 1s ease-in-out',
+            opacity: 0.4, // Dimmed background so the 3D countries are still visible
+          }}
+        />
+        
+        {/* Semi-transparent overlay */}
+        <div 
+          className="absolute inset-0 z-10"
+          style={{
+            backgroundColor: 'rgba(0, 0, 20, 0.7)',
+            transition: 'all 0.5s ease-in-out',
+          }}
+        />
+        
+        {/* Display current country name */}
+        {highlightedCountry && (
+          <div 
+            className="absolute left-0 right-0 z-30 text-center top-5"
+            style={{
+              color: '#FFFFFF',
+              fontSize: '2rem',
+              fontWeight: 'bold',
+              textShadow: '0 0 10px rgba(0, 0, 0, 0.8)',
+              transition: 'all 0.3s ease-in-out',
+            }}
+          >
+            {highlightedCountry}
+          </div>
+        )}
+        
+        {/* Globe container */}
         <div
           ref={globeRef}
+          className="relative z-20"
           style={{
             width: "100%",
             height: "100%",
@@ -282,19 +299,6 @@ const GlobeComponent = ({ cities, continent }) => {
       </div>
     </>
   );
-};
-
-const getContinentView = (continent) => {
-  switch (continent) {
-    case "Europe":
-      return { lat: 48, lng: 10, altitude: 2.5 };
-    case "Asia":
-      return { lat: 34, lng: 100, altitude: 2.5 };
-    case "North America":
-      return { lat: 45, lng: -100, altitude: 2.5 };
-    default:
-      return { lat: 0, lng: 0, altitude: 2.5 };
-  }
 };
 
 export default GlobeComponent;

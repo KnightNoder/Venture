@@ -1,311 +1,166 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import * as d3 from 'd3';
+import React, { useState } from 'react';
 
-const InteractiveGlobe = ({ countries = [] }) => {
-  const containerRef = useRef(null);
-  const globeRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
+const EuropeanMapComponent = () => {
   const [hoveredCountry, setHoveredCountry] = useState(null);
   
-  // Initialize the globe
-  useEffect(() => {
-    if (!containerRef.current) return;
-    
-    // Scene setup
-    const width = containerRef.current.clientWidth;
-    const height = containerRef.current.clientHeight;
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000033);
-    
-    // Camera setup
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-    camera.position.z = 300;
-    
-    // Renderer setup
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
-    containerRef.current.appendChild(renderer.domElement);
-    
-    // Controls setup
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.rotateSpeed = 0.5;
-    controls.minDistance = 150;
-    controls.maxDistance = 400;
-    
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 3, 5);
-    scene.add(directionalLight);
-    
-    // Earth sphere
-    const earthGeometry = new THREE.SphereGeometry(100, 64, 64);
-    const earthMaterial = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load('/api/placeholder/800/400'), // Placeholder for actual Earth texture
-      bumpMap: new THREE.TextureLoader().load('/api/placeholder/800/400'), // Placeholder for bump map
-      bumpScale: 1,
-      specular: new THREE.Color(0x111111),
-      shininess: 10
-    });
-    
-    const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
-    scene.add(earthMesh);
-    globeRef.current = { scene, camera, renderer, controls, earthMesh };
-    
-    // Handle resize
-    const handleResize = () => {
-      if (!containerRef.current) return;
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    
-    animate();
-    
-    // Load GeoJSON data to create country boundaries
-    loadCountryData(scene, earthMesh);
-    
-    setIsLoading(false);
-    
-    return () => {
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement);
-      }
-      window.removeEventListener('resize', handleResize);
-      renderer.dispose();
-    };
-  }, []);
-  
-  // Handle zooming to specified countries
-  useEffect(() => {
-    if (!globeRef.current || countries.length === 0 || isLoading) return;
-    
-    const { camera, controls } = globeRef.current;
-    
-    // Calculate the center point of all countries
-    const center = calculateCenterPoint(countries);
-    
-    // Convert lat/lng to 3D coordinates
-    const point = latLngToVector3(center.lat, center.lng, 150);
-    
-    // Animate camera to new position
-    const startPosition = camera.position.clone();
-    const endPosition = point.clone().multiplyScalar(1.5);
-    
-    // Look at the center point
-    const lookAtPoint = point.clone();
-    
-    // Animation duration in seconds
-    const duration = 2.5;
-    const startTime = Date.now();
-    
-    function animateCamera() {
-      const elapsed = (Date.now() - startTime) / 1000;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // Easing function for smooth animation
-      const easeProgress = easeInOutCubic(progress);
-      
-      // Interpolate camera position
-      camera.position.lerpVectors(startPosition, endPosition, easeProgress);
-      
-      // Update controls target to look at center point
-      controls.target.copy(lookAtPoint);
-      controls.update();
-      
-      if (progress < 1) {
-        requestAnimationFrame(animateCamera);
-      }
+  // Define the countries we want to highlight
+  const countries = [
+    {
+      id: 'france',
+      name: 'France',
+      path: 'M263,343 L290,330 L315,335 L320,325 L350,317 L355,295 L340,275 L350,255 L330,240 L325,220 L295,218 L285,200 L270,215 L255,210 L240,230 L225,225 L220,240 L235,265 L225,275 L245,290 L240,310 L250,325 L263,343Z',
+      color: '#3498db'
+    },
+    {
+      id: 'germany',
+      name: 'Germany',
+      path: 'M335,220 L360,215 L380,200 L400,210 L410,200 L420,220 L400,240 L405,260 L390,280 L370,275 L355,295 L350,317 L320,325 L315,335 L290,330 L325,220 L335,220Z',
+      color: '#f1c40f'
+    },
+    {
+      id: 'italy',
+      name: 'Italy',
+      path: 'M340,275 L355,295 L370,275 L390,280 L400,295 L380,320 L390,350 L410,360 L415,380 L385,390 L375,425 L355,430 L345,410 L340,390 L325,360 L340,340 L320,325 L350,317 L355,295 L340,275Z',
+      color: '#2ecc71'
+    },
+    {
+      id: 'spain',
+      name: 'Spain',
+      path: 'M150,345 L175,330 L200,335 L220,320 L240,310 L245,290 L225,275 L235,265 L220,240 L200,245 L175,265 L160,290 L130,310 L150,345Z',
+      color: '#e74c3c'
     }
-    
-    animateCamera();
-    
-  }, [countries, isLoading]);
+  ];
   
-  // Helper function: Convert latitude and longitude to 3D vector
-  const latLngToVector3 = (lat, lng, radius) => {
-    const phi = (90 - lat) * (Math.PI / 180);
-    const theta = (lng + 180) * (Math.PI / 180);
-    
-    const x = -radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.cos(phi);
-    const z = radius * Math.sin(phi) * Math.sin(theta);
-    
-    return new THREE.Vector3(x, y, z);
+  // Other European countries for context (simplified paths)
+  const otherCountries = [
+    {
+      id: 'uk',
+      name: 'United Kingdom',
+      path: 'M235,200 L255,180 L275,185 L285,170 L275,155 L250,160 L230,175 L235,200Z'
+    },
+    {
+      id: 'ireland',
+      name: 'Ireland',
+      path: 'M200,175 L220,165 L230,175 L225,190 L205,185 L200,175Z'
+    },
+    {
+      id: 'portugal',
+      name: 'Portugal',
+      path: 'M130,310 L160,290 L175,265 L160,275 L150,305 L130,310Z'
+    },
+    {
+      id: 'benelux',
+      name: 'Benelux',
+      path: 'M285,200 L295,218 L325,220 L325,200 L305,195 L295,190 L285,200Z'
+    },
+    {
+      id: 'switzerland',
+      name: 'Switzerland',
+      path: 'M315,335 L290,330 L325,220 L335,220 L320,325 L315,335Z'
+    },
+    {
+      id: 'austria',
+      name: 'Austria',
+      path: 'M380,320 L390,280 L405,260 L420,265 L430,280 L410,290 L390,295 L380,320Z'
+    }
+  ];
+  
+  // Handle mouse events
+  const handleMouseEnter = (countryId) => {
+    setHoveredCountry(countryId);
   };
   
-  // Helper function: Calculate center point of multiple countries
-  const calculateCenterPoint = (countries) => {
-    if (countries.length === 0) return { lat: 0, lng: 0 };
-    if (countries.length === 1) return { lat: countries[0].lat, lng: countries[0].lng };
-    
-    // Average the lat/lng values for simplicity
-    // For more complex scenarios, you might want to use a more sophisticated algorithm
-    const total = countries.reduce((acc, country) => {
-      return {
-        lat: acc.lat + country.lat,
-        lng: acc.lng + country.lng
-      };
-    }, { lat: 0, lng: 0 });
-    
-    return {
-      lat: total.lat / countries.length,
-      lng: total.lng / countries.length
-    };
-  };
-  
-  // Easing function for smooth animation
-  const easeInOutCubic = (t) => {
-    return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-  };
-  
-  // Load country GeoJSON data and create meshes
-  const loadCountryData = async (scene, earthMesh) => {
-    // In a real app, you would load actual GeoJSON data
-    // For this example, we'll create some placeholder country polygons
-    
-    const createCountryMesh = (countryName, coordinates, color) => {
-      const shape = new THREE.Shape();
-      
-      // Create a simple polygon shape for demonstration
-      coordinates.forEach((coord, i) => {
-        const point = latLngToVector3(coord[0], coord[1], 101); // Slightly above the globe surface
-        if (i === 0) {
-          shape.moveTo(point.x, point.y);
-        } else {
-          shape.lineTo(point.x, point.y);
-        }
-      });
-      
-      const geometry = new THREE.ShapeGeometry(shape);
-      const material = new THREE.MeshPhongMaterial({
-        color: color,
-        transparent: true,
-        opacity: 0.7,
-        side: THREE.DoubleSide
-      });
-      
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.userData = { countryName };
-      
-      // Add hover interaction
-      mesh.onBeforeRender = () => {
-        if (hoveredCountry === countryName) {
-          mesh.position.set(
-            mesh.position.x * 1.01,
-            mesh.position.y * 1.01,
-            mesh.position.z * 1.01
-          );
-          mesh.material.opacity = 0.9;
-        } else {
-          mesh.position.set(0, 0, 0);
-          mesh.material.opacity = 0.7;
-        }
-      };
-      
-      scene.add(mesh);
-      return mesh;
-    };
-    
-    // Example countries (in a real app, these would come from GeoJSON)
-    const sampleCountries = [
-      {
-        name: "United States",
-        color: 0x3388ff,
-        coords: [
-          [37, -100],
-          [37, -120],
-          [45, -120],
-          [45, -100]
-        ]
-      },
-      {
-        name: "Brazil",
-        color: 0x33cc33,
-        coords: [
-          [-10, -55],
-          [-10, -40],
-          [-20, -40],
-          [-20, -55]
-        ]
-      },
-      {
-        name: "Russia",
-        color: 0xff3333,
-        coords: [
-          [60, 30],
-          [60, 100],
-          [70, 100],
-          [70, 30]
-        ]
-      }
-    ];
-    
-    // Create meshes for each country
-    sampleCountries.forEach(country => {
-      createCountryMesh(country.name, country.coords, country.color);
-    });
-    
-    // Implement country hovering
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    
-    containerRef.current.addEventListener('mousemove', (event) => {
-      const rect = containerRef.current.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      
-      raycaster.setFromCamera(mouse, globeRef.current.camera);
-      const intersects = raycaster.intersectObjects(scene.children);
-      
-      if (intersects.length > 0) {
-        const object = intersects[0].object;
-        if (object.userData && object.userData.countryName) {
-          setHoveredCountry(object.userData.countryName);
-        } else {
-          setHoveredCountry(null);
-        }
-      } else {
-        setHoveredCountry(null);
-      }
-    });
+  const handleMouseLeave = () => {
+    setHoveredCountry(null);
   };
   
   return (
-    <div className="relative w-full h-screen">
-      <div 
-        ref={containerRef} 
-        className="w-full h-full"
-      />
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <p className="text-lg text-white">Loading globe...</p>
-        </div>
-      )}
-      {hoveredCountry && (
-        <div className="absolute px-4 py-2 text-white bg-gray-800 rounded-md top-4 left-4">
-          {hoveredCountry}
-        </div>
-      )}
+    <div className="w-full max-w-4xl p-4 mx-auto">
+      <h2 className="mb-4 text-2xl font-bold text-center">Interactive European Map</h2>
+      
+      <div className="relative w-full aspect-[4/3] bg-blue-50 rounded-lg shadow-lg overflow-hidden">
+        {/* Ocean background */}
+        <div className="absolute inset-0 bg-blue-100"></div>
+        
+        <svg 
+          viewBox="100 100 350 350" 
+          className="absolute inset-0 w-full h-full"
+        >
+          {/* Other European countries for context */}
+          {otherCountries.map(country => (
+            <path
+              key={country.id}
+              d={country.path}
+              fill="#d1d5db" // Gray color
+              stroke="#9ca3af"
+              strokeWidth="1"
+              opacity="0.7"
+            />
+          ))}
+          
+          {/* Main interactive countries */}
+          {countries.map(country => (
+            <g key={country.id} transform={`translate(0, ${hoveredCountry === country.id ? -10 : 0})`}>
+              {/* Shadow effect when elevated */}
+              {hoveredCountry === country.id && (
+                <path
+                  d={country.path}
+                  fill="rgba(0,0,0,0.3)"
+                  transform="translate(3, 13)"
+                  filter="blur(4px)"
+                />
+              )}
+              
+              {/* Country shape */}
+              <path
+                d={country.path}
+                fill={country.color}
+                fillOpacity={hoveredCountry === country.id ? 0.9 : 0.6}
+                stroke="#000"
+                strokeWidth={hoveredCountry === country.id ? 2 : 1}
+                onMouseEnter={() => handleMouseEnter(country.id)}
+                onMouseLeave={handleMouseLeave}
+                style={{ 
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease, fill-opacity 0.3s ease, stroke-width 0.3s ease'
+                }}
+              />
+              
+              {/* Country label */}
+              <text
+                textAnchor="middle"
+                x={country.id === 'france' ? 280 : 
+                   country.id === 'germany' ? 370 : 
+                   country.id === 'italy' ? 370 : 
+                   country.id === 'spain' ? 190 : 0}
+                y={country.id === 'france' ? 275 : 
+                   country.id === 'germany' ? 240 : 
+                   country.id === 'italy' ? 380 : 
+                   country.id === 'spain' ? 300 : 0}
+                fill={hoveredCountry === country.id ? "#000" : "#333"}
+                fontWeight={hoveredCountry === country.id ? "bold" : "normal"}
+                fontSize={hoveredCountry === country.id ? "12" : "10"}
+                pointerEvents="none"
+                style={{ transition: 'font-size 0.3s ease, font-weight 0.3s ease, fill 0.3s ease' }}
+              >
+                {country.name}
+              </text>
+            </g>
+          ))}
+        </svg>
+        
+        {/* Information panel */}
+        {hoveredCountry && (
+          <div className="absolute p-3 text-center transform -translate-x-1/2 bg-white rounded-lg shadow-md bottom-4 left-1/2 bg-opacity-90">
+            <h3 className="font-bold">
+              {countries.find(c => c.id === hoveredCountry)?.name}
+            </h3>
+            <p className="text-sm text-gray-600">Click to explore</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-export default InteractiveGlobe;
+export default EuropeanMapComponent;
