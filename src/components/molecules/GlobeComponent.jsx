@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Globe from "globe.gl";
 import europeGeoJSON from "./geoJson.json"; // Import your Natural Earth GeoJSON file
 import FranceVideo from "../../assets/videos/France3.mp4";
@@ -190,8 +190,11 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       const globe = Globe()(globeRef.current);
       globeInstanceRef.current = globe;
       
-      // Set focused view on Europe
-      const europeView = { lat: 44, lng: 10, altitude: 0.75 };
+      // Set focused view on Europe based on device size
+      const isMobile = window.innerWidth < 768;
+      const europeView = isMobile 
+        ? { lat: 38, lng: 5, altitude: 0.75 }  // Mobile view
+        : { lat: 44, lng: 10, altitude: 0.75 }; // Desktop/tablet view
   
       // Customize the globe appearance - minimal settings for better performance
       globe
@@ -202,16 +205,15 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         .showAtmosphere(false);
   
       const controls = globe.controls();
+      // Disable all controls to prevent movement and rotation
       controls.enabled = false;      // Completely disable controls
       controls.autoRotate = false;   // No auto-rotation
       controls.enableRotate = false; // No manual rotation
-      controls.enablePan = false; 
-      controls.autoRotate = false;
-      controls.minDistance = 90;
-      controls.maxDistance = 500;
-      controls.enableZoom = false;
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
+      controls.enablePan = false;    // No panning
+      controls.enableZoom = false;   // No zooming
+      controls.enableDamping = false;// No damping
+      controls.mouseButtons = {};    // Disable mouse buttons
+      controls.touches = {};         // Disable touch controls
   
       // Process GeoJSON data once
       const getCountryName = (feature) =>
@@ -341,6 +343,39 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       
   }, [highlightedCountry, countryColors, highlightedCountryColors]);
 
+  // Force the globe to stay in position
+  useEffect(() => {
+    // This is a backup to make sure the globe stays in place
+    // It resets the view to the initial position periodically
+    if (!globeInstanceRef.current) return;
+    
+    // Reset the view every second (overkill but ensures it stays fixed)
+    const updateViewByDevice = () => {
+      const isMobile = window.innerWidth < 768;
+      const europeView = isMobile 
+        ? { lat: 38, lng: 5, altitude: 0.75 }  // Mobile view
+        : { lat: 44, lng: 10, altitude: 0.75 }; // Desktop/tablet view
+      
+      if (globeInstanceRef.current) {
+        globeInstanceRef.current.pointOfView(europeView, 0);
+      }
+    };
+    
+    // Set initial view
+    updateViewByDevice();
+    
+    // Continue setting view periodically
+    const intervalId = setInterval(updateViewByDevice, 1000);
+    
+    // Also update when window resizes
+    window.addEventListener('resize', updateViewByDevice);
+    
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener('resize', updateViewByDevice);
+    };
+  }, []);
+
   return (
     <div 
       ref={containerRef} 
@@ -405,8 +440,10 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         style={{
           width: "100%",
           height: "100%",
-          maxWidth: "100vw"
+          maxWidth: "100vw",
+          pointerEvents: "none" // Additional security to prevent interaction
         }}
+        onMouseDown={(e) => e.preventDefault()} // Extra prevention of drag
       />
     </div>
   );
