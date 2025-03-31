@@ -15,7 +15,6 @@ const DesktopTabletFooter = () => {
           <div className="col-span-1">
             <div className="flex items-center mb-4">
               <img src={Logo1 } className='w-15 h-15' alt="" srcset="" />
-              <span className="text-[#8494a7] text-2xl font-medium">Traveler</span>
             </div>
             <p className="text-sm text-[#c9d0d9] leading-6 mb-6">
               Lorem ipsum is simply dummy text of the printing and typesetting industry. 

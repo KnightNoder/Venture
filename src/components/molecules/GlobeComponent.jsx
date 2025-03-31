@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Globe from "globe.gl";
 import europeGeoJSON from "./geoJson.json"; // Import your Natural Earth GeoJSON file
-import FranceVideo from "../../assets/videos/France2.mp4";
-import GermanyVideo from "../../assets/videos/Germany2.mp4";
-import ItalyVideo from "../../assets/videos/Italy2.mp4";
-import SpainVideo from "../../assets/videos/Spain2.mp4";
+import FranceVideo from "../../assets/videos/France3.mp4";
+import GermanyVideo from "../../assets/videos/Germany3.mp4";
+import ItalyVideo from "../../assets/videos/Italy3.mp4";
+import SpainVideo from "../../assets/videos/Spain3.mp4";
 
 const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const globeRef = useRef(null);
@@ -111,7 +111,6 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
 
     const controls = globe.controls();
     controls.autoRotate = false;
-    controls.enableZoom = true;
     controls.minDistance = 90;
     controls.maxDistance = 500;
     controls.minPolarAngle = 0;
@@ -301,7 +300,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       className="relative w-full overflow-hidden" 
       style={{ 
         height: dimensions.height,
-        backgroundColor: "black" // Black background to prevent any grey flash
+        backgroundColor: "rgba(0,0,0,.25)" // Black background to prevent any grey flash
       }}
     >
       {/* Background placeholder to prevent grey flash */}
@@ -341,7 +340,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       <div
         className="absolute inset-0 z-10"
         style={{
-          backgroundColor: "rgba(0, 0, 20, 0.5)",
+          backgroundColor: "rgba(0, 0, 0, 0)",
           transition: "all 0.1s ease-in-out",
         }}
       />
