@@ -17,38 +17,38 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const currentVideoRef = useRef(null);
   const nextVideoRef = useRef(null);
   
+  // Define background videos for each country - NOT using useMemo to avoid stale references
+  const countryVideos = {
+    France: FranceVideo,
+    Germany: GermanyVideo,
+    Italy: ItalyVideo,
+    Spain: SpainVideo,
+  };
+  
   // Default video
   const defaultVideo = GermanyVideo;
   const [activeVideoSrc, setActiveVideoSrc] = useState(defaultVideo);
-  const [previousVideoSrc, setPreviousVideoSrc] = useState(defaultVideo);
+  const [previousVideoSrc, setPreviousVideoSrc] = useState(FranceVideo);
   const fadeAnimationRef = useRef(null);
 
   // Define visible countries
   const visibleCountries = ["France", "Germany", "Spain", "Italy"];
 
-  // Define country-specific colors - using useMemo to avoid recreating objects
-  const countryColors = useMemo(() => ({ 
+  // Define country-specific colors - using constants to avoid recreating objects
+  const countryColors = { 
     France: "rgba(0, 35, 149, 0.3)",  // French flag blue
     Germany: "rgba(221, 0, 0, 0.3)",  // German flag red
     Italy: "rgba(0, 146, 70, 0.3)",   // Italian flag green
     Spain: "rgba(255, 196, 0, 0.3)"   // Spanish flag yellow
-  }), []);
+  };
   
   // For highlighted states, use secondary colors from the flags
-  const highlightedCountryColors = useMemo(() => ({
+  const highlightedCountryColors = {
     France: "rgba(237, 41, 57, 0.8)",  // French flag red
     Germany: "rgba(255, 206, 0, 0.8)", // German flag gold
     Italy: "rgba(206, 43, 55, 0.8)",   // Italian flag red
     Spain: "rgba(198, 11, 30, 0.8)"    // Spanish flag red
-  }), []);
-
-  // Define background videos for each country
-  const countryVideos = useMemo(() => ({
-    France: FranceVideo,
-    Germany: GermanyVideo,
-    Italy: ItalyVideo,
-    Spain: SpainVideo,
-  }), []);
+  };
 
   // Debounce function to prevent too many video transitions
   const debounce = useCallback((func, delay) => {
@@ -97,6 +97,8 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
 
   // Initialize videos when component mounts or when activeVideoSrc changes
   useEffect(() => {
+    console.log("Active video changed to:", activeVideoSrc);
+    
     if (currentVideoRef.current) {
       currentVideoRef.current.src = activeVideoSrc;
       currentVideoRef.current.load(); // Ensures video is loaded before playing
@@ -111,7 +113,10 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   }, [activeVideoSrc]);
 
   // Handle video transition with optimized animation
-  const handleVideoTransition = useCallback((newVideoSrc) => {
+  // We're not using useCallback here to avoid stale closures
+  const handleVideoTransition = (newVideoSrc) => {
+    console.log("handleVideoTransition called with:", newVideoSrc);
+    
     // Cancel any ongoing animation
     if (fadeAnimationRef.current) {
       cancelAnimationFrame(fadeAnimationRef.current);
@@ -121,18 +126,23 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     setActiveVideoSrc(newVideoSrc);
     
     if (nextVideoRef.current) {
+      // Explicit logging to debug video transitions
+      console.log("Setting next video source to:", newVideoSrc);
+      
       nextVideoRef.current.src = newVideoSrc;
       nextVideoRef.current.style.opacity = "0";
       nextVideoRef.current.load();
       
       const playPromise = nextVideoRef.current.play();
       if (playPromise !== undefined) {
-        playPromise.catch(e => console.log("Video play prevented:", e));
+        playPromise
+          .then(() => console.log("Video started playing successfully"))
+          .catch(e => console.log("Video play prevented:", e));
       }
       
       // Start transition with requestAnimationFrame
       let start;
-      const duration = 800; // Reduced from 1000ms to 800ms for better performance
+      const duration = 600; // Even faster transition for better responsiveness
       
       function fadeAnimation(timestamp) {
         if (!start) start = timestamp;
@@ -152,6 +162,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         if (progress < 1) {
           fadeAnimationRef.current = requestAnimationFrame(fadeAnimation);
         } else {
+          console.log("Fade animation complete");
           // Swap references when animation completes
           const temp = currentVideoRef.current;
           currentVideoRef.current = nextVideoRef.current;
@@ -159,7 +170,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
           
           // Reset next video opacity
           if (nextVideoRef.current) {
-            nextVideoRef.current.style.opacity = "0"; // Set to 0 instead of 0.5
+            nextVideoRef.current.style.opacity = "0";
           }
           
           fadeAnimationRef.current = null;
@@ -168,7 +179,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       
       fadeAnimationRef.current = requestAnimationFrame(fadeAnimation);
     }
-  }, [activeVideoSrc]);
+  };
 
   // Initialize globe once when component mounts
   useEffect(() => {
@@ -191,6 +202,10 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         .showAtmosphere(false);
   
       const controls = globe.controls();
+      controls.enabled = false;      // Completely disable controls
+      controls.autoRotate = false;   // No auto-rotation
+      controls.enableRotate = false; // No manual rotation
+      controls.enablePan = false; 
       controls.autoRotate = false;
       controls.minDistance = 90;
       controls.maxDistance = 500;
@@ -249,28 +264,34 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   useEffect(() => {
     if (!globeInstanceRef.current) return;
     
-    // Debounce the hover handler to prevent rapid state changes
-    const debouncedHoverHandler = debounce((polygon) => {
+    // Direct hover handler without debounce to ensure immediate response
+    const hoverHandler = (polygon) => {
       if (polygon) {
         const countryName = polygon.properties.name;
+        console.log("Hover detected on country:", countryName);
+        
+        // Get the correct video for this country
         const videoSrc = countryVideos[countryName];
+        console.log("Video source for country:", videoSrc);
         
         if (videoSrc && videoSrc !== activeVideoSrc) {
+          console.log("Transitioning to video:", videoSrc);
           handleVideoTransition(videoSrc);
         }
         setHighlightedCountry(countryName);
       } else {
-        // Only change video if not already on default
+        // Mouse left a country, return to default
+        console.log("Exiting country, returning to default video");
         if (activeVideoSrc !== defaultVideo) {
           handleVideoTransition(defaultVideo);
         }
         setHighlightedCountry(null);
       }
-    }, 50);
+    };
 
     // Set up event handlers
     globeInstanceRef.current
-      .onPolygonHover(debouncedHoverHandler)
+      .onPolygonHover(hoverHandler)
       .onPolygonClick((polygon) => {
         if (polygon && polygon.properties) {
           const country = polygon.properties.name;
@@ -288,7 +309,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         globeInstanceRef.current.onPolygonClick(null);
       }
     };
-  }, [cities, countryVideos, activeVideoSrc, defaultVideo, debounce, handleVideoTransition]);
+  }, [cities, countryVideos, activeVideoSrc, defaultVideo, handleVideoTransition]);
 
   // Update only the styling properties when highlightedCountry changes
   // This is in a separate useEffect to prevent recreating the globe
