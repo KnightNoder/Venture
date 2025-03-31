@@ -7,6 +7,8 @@ import LandingPage from './components/organisms/LandingPage/LandingPage'
 import Destination from './components/organisms/DestinationPage/Destination'
 import AboutUs from './components/organisms/AboutUs/AboutUs'
 import ContactUs from './components/organisms/ContactUs/Contact'
+import Coming from './components/organisms/ComingSoon/Coming';
+import ComingSoon from './components/organisms/ComingSoon/ComingSoon';
 
 function App() {
 
@@ -17,6 +19,7 @@ function App() {
         <Route path='/about' element={<AboutUs/>}/>
         <Route path='/contact-us' element={<ContactUs/>}/>
         <Route path='/destination' element={<Destination/>}/>
+        <Route path='/coming' element={<ComingSoon/>}/>
       </Routes>
     </Router>
   )

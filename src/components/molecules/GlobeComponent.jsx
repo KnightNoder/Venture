@@ -50,6 +50,14 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     Spain: "rgba(198, 11, 30, 0.8)"    // Spanish flag red
   };
 
+  // Define capitals data for labels
+  const capitalLabels = [
+    { lat: 48.8566, lng: 2.3522, name: 'Paris', country: 'France' },
+    { lat: 52.5200, lng: 13.4050, name: 'Berlin', country: 'Germany' },
+    { lat: 41.9028, lng: 12.4964, name: 'Rome', country: 'Italy' },
+    { lat: 40.4168, lng: -3.7038, name: 'Madrid', country: 'Spain' }
+  ];
+
   // Debounce function to prevent too many video transitions
   const debounce = useCallback((func, delay) => {
     let timerId;
@@ -245,6 +253,28 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         .polygonsTransitionDuration(200)
         .polygonCapColor((d) => countryColors[d.properties.name])
         .polygonAltitude(() => 0.06);
+      
+      // Use HTML elements for labels instead of built-in labels
+      globe
+        .htmlElementsData(capitalLabels)
+        .htmlElement(d => {
+          const el = document.createElement('div');
+          el.className = 'country-label';
+          el.textContent = d.country;
+          el.style.color = 'white';
+          el.style.fontWeight = 'bold';
+          el.style.fontSize = '14px';
+          el.style.textAlign = 'center';
+          el.style.textShadow = '0 0 5px rgba(0, 0, 0, 0.8), 0 0 3px rgba(0, 0, 0, 0.8)';
+          el.style.pointerEvents = 'none'; // Don't interfere with mouse events
+          el.style.userSelect = 'none'; // Prevent text selection
+          el.style.transform = 'translate(-50%, -50%)'; // Center the element
+          el.style.whiteSpace = 'nowrap'; // Keep text on one line
+          return el;
+        })
+        .htmlAltitude(0.1) // Keep slightly above the polygons
+        .htmlLat(d => d.lat)
+        .htmlLng(d => d.lng);
     }
     
     return () => {
@@ -351,8 +381,8 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     const updateViewByDevice = () => {
       const isMobile = window.innerWidth < 768;
       const europeView = isMobile 
-        ? { lat: 38, lng: 5, altitude: 0.75 }  // Mobile view
-        : { lat: 44, lng: 10, altitude: 0.75 }; // Desktop/tablet view
+        ? { lat: 38, lng: 5, altitude: .75 }  // Mobile view
+        : { lat: 43, lng: 10, altitude: .75 }; // Desktop/tablet view
       
       if (globeInstanceRef.current) {
         globeInstanceRef.current.pointOfView(europeView, 0);

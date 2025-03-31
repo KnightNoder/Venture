@@ -29,7 +29,6 @@ const MobileFooter = () => {
         <div className="mb-8">
           <div className="flex items-center mb-4">
             <img src={Logo1} className='w-10 h-10' alt="" srcset="" />
-            <span className="text-[#8494a7] text-3xl font-medium">Traveler</span>
           </div>
           <p className="text-sm text-[#c9d0d9] leading-6">
             Lorem ipsum is simply dummy text of the printing and typesetting
