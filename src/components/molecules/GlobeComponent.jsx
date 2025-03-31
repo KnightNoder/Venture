@@ -1,6 +1,10 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react";
 import Globe from "globe.gl";
-import europeGeoJSON from './geoJson.json'; // Import your Natural Earth GeoJSON file
+import europeGeoJSON from "./geoJson.json"; // Import your Natural Earth GeoJSON file
+import FranceVideo from "../../assets/videos/France2.mp4";
+import GermanyVideo from "../../assets/videos/Germany2.mp4";
+import ItalyVideo from "../../assets/videos/Italy2.mp4";
+import SpainVideo from "../../assets/videos/Spain2.mp4";
 
 const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const globeRef = useRef(null);
@@ -8,41 +12,60 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const globeInstanceRef = useRef(null);
   const [highlightedCountry, setHighlightedCountry] = useState(null);
+  
+  // Track both videos for crossfade
+  const currentVideoRef = useRef(null);
+  const nextVideoRef = useRef(null);
+  
+  // Default video
+  const defaultVideo = GermanyVideo;
+  const [activeVideoSrc, setActiveVideoSrc] = useState(defaultVideo);
+  const [previousVideoSrc, setPreviousVideoSrc] = useState(defaultVideo);
 
-
-  // Define only the countries we want to be visible
-  const visibleCountries = ['France', 'Germany', 'Spain', 'Italy'];
+  // Define visible countries
+  const visibleCountries = ["France", "Germany", "Spain", "Italy"];
 
   // Define country-specific colors
-  const countryColors = {
-    'France': 'rgba(41, 128, 185, 0)',  // Blue (Transparent)
-    'Germany': 'rgba(142, 68, 173, 0)', // Purple (Transparent)
-    'Italy': 'rgba(39, 174, 96, 0)',    // Green (Transparent)
-    'Spain': 'rgba(192, 57, 43, 0)'     // Red (Transparent)
+  const countryColors = { 
+    France: "rgba(0, 35, 149, 0.3)",  // French flag blue
+    Germany: "rgba(221, 0, 0, 0.3)",  // German flag red
+    Italy: "rgba(0, 146, 70, 0.3)",   // Italian flag green
+    Spain: "rgba(255, 196, 0, 0.3)"   // Spanish flag yellow
   };
   
-  // Define background images for each country
-  const countryBackgrounds = {
-    'France': 'url(https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop)', // Paris
-    'Germany': 'url(https://images.unsplash.com/photo-1599946347371-68eb71b16afc?q=80&w=2073&auto=format&fit=crop)', // Berlin
-    'Italy': 'url(https://images.unsplash.com/photo-1529260830199-42c24126f198?q=80&w=2076&auto=format&fit=crop)',   // Rome
-    'Spain': 'url(https://images.unsplash.com/photo-1539037116277-4db20889f2d4?q=80&w=2070&auto=format&fit=crop)',   // Madrid
-    'default': 'url(https://images.unsplash.com/photo-1519677100203-a0e668c92439?q=80&w=2070&auto=format&fit=crop)'  // Default Europe
+  // For highlighted states, use secondary colors from the flags
+  const highlightedCountryColors = {
+    France: "rgba(237, 41, 57, 0.8)",  // French flag red
+    Germany: "rgba(255, 206, 0, 0.8)", // German flag gold
+    Italy: "rgba(206, 43, 55, 0.8)",   // Italian flag red
+    Spain: "rgba(198, 11, 30, 0.8)"    // Spanish flag red
   };
 
-const [backgroundImage, setBackgroundImage] = useState(countryBackgrounds['default'])
+  // Define background videos for each country
+  const countryVideos = {
+    France: FranceVideo,
+    Germany: GermanyVideo,
+    Italy: ItalyVideo,
+    Spain: SpainVideo,
+  };
 
+  // We're no longer using this function since we've moved the video changing logic
+  // directly into the hover handler for more reliable behavior
+  const changeVideo = useCallback((newVideoSrc) => {
+    console.log("This function is no longer used");
+  }, []);
 
+  // Update dimensions on resize
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
-        const width = Math.min(window.innerWidth, 1200); // Cap max width
+        const width = Math.min(window.innerWidth, 1200);
         const height =
           window.innerHeight < 500
-            ? window.innerHeight * 0.7 // For very small heights
+            ? window.innerHeight * 0.7
             : window.innerWidth < 768
-              ? window.innerHeight * 0.6 // Mobile
-              : window.innerHeight * 0.9; // Desktop
+            ? window.innerHeight * 0.6
+            : window.innerHeight * 0.9;
 
         setDimensions({ width, height });
       }
@@ -53,6 +76,22 @@ const [backgroundImage, setBackgroundImage] = useState(countryBackgrounds['defau
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
+  // Initialize videos when component mounts or when activeVideoSrc changes
+  useEffect(() => {
+    console.log("Setting up video with source:", activeVideoSrc);
+    
+    if (currentVideoRef.current) {
+      currentVideoRef.current.src = activeVideoSrc;
+      currentVideoRef.current.play().catch(e => console.log("Video play prevented:", e));
+    }
+    
+    if (nextVideoRef.current && !nextVideoRef.current.src) {
+      nextVideoRef.current.src = activeVideoSrc;
+      nextVideoRef.current.play().catch(e => console.log("Video play prevented:", e));
+    }
+  }, [activeVideoSrc]);
+
+  // Initialize globe when component mounts (only once)
   useEffect(() => {
     if (!globeRef.current) return;
 
@@ -62,242 +101,279 @@ const [backgroundImage, setBackgroundImage] = useState(countryBackgrounds['defau
     // Set focused view on Europe
     const europeView = { lat: 44, lng: 10, altitude: 0.75 };
 
-    // Make the globe completely transparent with a transparent background
+    // Customize the globe appearance
     globe
-      .globeImageUrl("") // No image for the globe
+      .globeImageUrl("")
       .backgroundColor("rgba(0, 0, 0, 0)") // Transparent background
-      .pointOfView(europeView, 100) // Smooth transition to Europe view
-      .showGlobe(false) // Hide the globe sphere completely
-      .showAtmosphere(false); // No atmosphere
-      
-    // Enable custom bounds for the globe view
-    globe.controls().autoRotate = false;
-    globe.controls().enableZoom = true;
-    globe.controls().minDistance = 90; // Prevent zooming out too far
-    globe.controls().maxDistance = 500; // Prevent zooming in too far
-    
-    // Allow full rotation in all directions
+      .pointOfView(europeView, 100)
+      .showGlobe(false)
+      .showAtmosphere(false);
+
     const controls = globe.controls();
-    
-    // Remove rotation restrictions
+    controls.autoRotate = false;
+    controls.enableZoom = true;
+    controls.minDistance = 90;
+    controls.maxDistance = 500;
     controls.minPolarAngle = 0;
     controls.maxPolarAngle = Math.PI;
-    
-    // Allow full azimuthal rotation
     controls.minAzimuthAngle = -Infinity;
     controls.maxAzimuthAngle = Infinity;
+    controls.enableZoom = false;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.mouseButtons.wheel = null;
+    controls.touches.two = null;
 
-    // Process the GeoJSON data
-    const getCountryName = (feature) => {
-      return feature.properties.NAME || 
-             feature.properties.name || 
-             feature.properties.ADMIN ||
-             feature.properties.NAME_LONG ||
-             '';
-    };
+    const getCountryName = (feature) =>
+      feature.properties.NAME ||
+      feature.properties.name ||
+      feature.properties.ADMIN ||
+      feature.properties.NAME_LONG ||
+      "";
 
-    // Filter GeoJSON to ONLY include the four visible countries
     const filteredGeoJSON = {
       type: "FeatureCollection",
-      features: europeGeoJSON.features.filter(feature => {
+      features: europeGeoJSON.features.filter((feature) => {
         const countryName = getCountryName(feature);
         return visibleCountries.includes(countryName);
-      })
+      }),
     };
 
-    // Convert GeoJSON to the format expected by Globe.gl
-    const polygonsData = filteredGeoJSON.features.map(feature => {
+    const polygonsData = filteredGeoJSON.features.map((feature) => {
       const countryName = getCountryName(feature);
       return {
-        properties: { 
+        properties: {
           name: countryName,
-          id: countryName.toLowerCase()
+          id: countryName.toLowerCase(),
         },
-        geometry: feature.geometry
+        geometry: feature.geometry,
       };
     });
 
-    // Function to get country color
-    const getCountryColor = (d) => {
-      // If country is highlighted, return highlight color
-      if (d.properties.name === highlightedCountry) {
-        return "rgba(255, 140, 0, 0.9)"; // Red when highlighted
+    // Function to handle polygon hover event
+    const handlePolygonHover = (polygon) => {
+      if (polygon) {
+        const countryName = polygon.properties.name;
+        const videoSrc = countryVideos[countryName];
+        console.log("Hover over:", countryName, "Video:", videoSrc);
+        
+        // Always force the video change regardless of current state
+        if (videoSrc) {
+          // Force setting of previous video first to ensure transition happens
+          setPreviousVideoSrc(activeVideoSrc);
+          setActiveVideoSrc(videoSrc);
+          
+          // Then call changeVideo to handle the transition
+          if (nextVideoRef.current) {
+            nextVideoRef.current.src = videoSrc;
+            nextVideoRef.current.style.opacity = "0";
+            nextVideoRef.current.currentTime = 0;
+            
+            const playPromise = nextVideoRef.current.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(e => console.log("Video play prevented:", e));
+            }
+            
+            // Start transition with requestAnimationFrame
+            let start;
+            const duration = 1000; 
+            
+            function fadeAnimation(timestamp) {
+              if (!start) start = timestamp;
+              const elapsed = timestamp - start;
+              const progress = Math.min(elapsed / duration, 1);
+              
+              // Fade out current video
+              if (currentVideoRef.current) {
+                currentVideoRef.current.style.opacity = 1 - progress;
+              }
+              
+              // Fade in next video
+              if (nextVideoRef.current) {
+                nextVideoRef.current.style.opacity = progress;
+              }
+              
+              if (progress < 1) {
+                requestAnimationFrame(fadeAnimation);
+              } else {
+                // Swap references when animation completes
+                const temp = currentVideoRef.current;
+                currentVideoRef.current = nextVideoRef.current;
+                nextVideoRef.current = temp;
+                
+                // Reset next video opacity
+                if (nextVideoRef.current) {
+                  nextVideoRef.current.style.opacity = "0";
+                }
+              }
+            }
+            
+            requestAnimationFrame(fadeAnimation);
+          }
+        }
+        setHighlightedCountry(countryName);
+      } else {
+        // Do the same direct manipulation for default video
+        setPreviousVideoSrc(activeVideoSrc);
+        setActiveVideoSrc(defaultVideo);
+        
+        if (nextVideoRef.current) {
+          nextVideoRef.current.src = defaultVideo;
+          nextVideoRef.current.style.opacity = "0";
+          nextVideoRef.current.currentTime = 0;
+          
+          // Similar transition logic...
+          nextVideoRef.current.play().catch(e => console.log("Video play prevented:", e));
+          
+          let start;
+          const duration = 1000;
+          
+          function fadeAnimation(timestamp) {
+            if (!start) start = timestamp;
+            const elapsed = timestamp - start;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            if (currentVideoRef.current) currentVideoRef.current.style.opacity = 1 - progress;
+            if (nextVideoRef.current) nextVideoRef.current.style.opacity = progress;
+            
+            if (progress < 1) {
+              requestAnimationFrame(fadeAnimation);
+            } else {
+              const temp = currentVideoRef.current;
+              currentVideoRef.current = nextVideoRef.current;
+              nextVideoRef.current = temp;
+              if (nextVideoRef.current) nextVideoRef.current.style.opacity = "0";
+            }
+          }
+          
+          requestAnimationFrame(fadeAnimation);
+        }
+        
+        setHighlightedCountry(null);
       }
-      
-      // Otherwise return the country-specific color
-      return countryColors[d.properties.name];
-    };
-
-    // Altitude settings for 3D effect
-    const getCountryAltitude = (d) => {
-      return d.properties.name === highlightedCountry ? 0.15 : 0.06;
     };
 
     globe
       .polygonsData(polygonsData)
-      .polygonCapColor(getCountryColor)
-      .polygonSideColor(() => "rgba(189, 195, 199, 0.2)") // Brighter sides
-      .polygonStrokeColor(() => "rgba(236, 240, 241, 0.8)") // White borders
-      .polygonAltitude(getCountryAltitude)
-      .polygonsTransitionDuration(300) // smooth transition
-      .polygonLabel(({ properties: d }) => `
-        <div style="
-          background-color: rgba(0, 0, 0, 0.85);
-          color: white;
-          padding: 10px;
-          border-radius: 5px;
-          font-family: Arial, sans-serif;
-          font-size: 14px;
-          line-height: 1.4;
-          border: 1px solid ${countryColors[d.name]};
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        ">
-          <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">${d.name}</div>
-          <div>Click to explore ${d.name}</div>
-        </div>
-      `)
-      .onPolygonHover((polygon) => {
-        if (polygon) {
-          const countryName = polygon.properties.name;
-          setHighlightedCountry(countryName);
-          // Update background image based on hovered country
-          setBackgroundImage(countryBackgrounds[countryName] || countryBackgrounds['default']);
-        } else {
-          setHighlightedCountry(null);
-          // Reset to default background when not hovering any country
-          setBackgroundImage(countryBackgrounds['default']);
-        }
-      })
+      .polygonSideColor(() => "rgba(189, 195, 199, 0.2)")
+      .polygonStrokeColor(() => "rgba(236, 240, 241, 0.8)")
+      .polygonsTransitionDuration(300)
+      .onPolygonHover(handlePolygonHover)
       .onPolygonClick((polygon) => {
         if (polygon && polygon.properties) {
           const country = polygon.properties.name;
-          const targetCity = cities?.find(city => city.country === country);
+          const targetCity = cities?.find((city) => city.country === country);
           if (targetCity && targetCity.url) {
             window.open(targetCity.url, "_blank");
           }
         }
       });
 
-    // Add city markers if cities are provided
-    if (cities && cities.length > 0) {
-      // Filter to only include cities from the four visible countries
-      const visibleCities = cities.filter(city => 
-        visibleCountries.includes(city.country)
-      );
-      
-      globe
-        .pointsData(visibleCities)
-        .pointAltitude(0.001)
-        .pointRadius(0.5)
-        .pointResolution(1)
-        .pointsMerge(true)
-        .onPointClick(({ url }) => window.open(url, "_blank"))
-        .onPointHover((point) => {
-          if (point && point.country) {
-            const countryName = point.country;
-            setHighlightedCountry(countryName);
-            // Change globe background instead of point color
-            const newBackground = countryBackgrounds[countryName] || countryBackgrounds['default'];
-            globe.backgroundImage(newBackground);
-          }
-        })
-        .labelsData(visibleCities)
-        .labelText("name")
-        .labelSize(d => d.country === highlightedCountry ? 2.0 : 1.5)
-        .labelColor("#DDDDDD")
-        .labelResolution(2)
-        .labelAltitude(0.01)
-        .labelDotRadius(d => d.country === highlightedCountry ? 0.5 : 0.3)
-        .labelDotOrientation(() => 'bottom');
-
-    }
-
     return () => {
       if (globeInstanceRef.current) {
         globeInstanceRef.current._destructor();
       }
     };
-  }, [cities]);
+  }, [cities, changeVideo, defaultVideo]);
 
+  // Update only the styling properties when highlightedCountry changes
   useEffect(() => {
-    if (globeInstanceRef.current) {
-      // Update visual elements when highlighted country changes
-      globeInstanceRef.current
-        .polygonCapColor((d) => {
-          if (d.properties.name === highlightedCountry) {
-            return "rgba(255, 255, 255, 0.15)";
-          }
-          return countryColors[d.properties.name];
-        })
-        .polygonAltitude((d) => d.properties.name === highlightedCountry ? 0.15 : 0.06)
-        .pointAltitude(d => d.country === highlightedCountry ? 0.18 : 0.09)
-        .pointColor(d => d.country === highlightedCountry ? "#FFDD00CC" : "#FFD70080")
-        .pointRadius(d => d.country === highlightedCountry ? 0.8 : 0.5)
-        .labelSize(d => d.country === highlightedCountry ? 2.0 : 1.5)
-        .labelColor(d => d.country === highlightedCountry ? "#FFFFFF" : "#DDDDDD")
-        .labelDotRadius(d => d.country === highlightedCountry ? 0.5 : 0.3);
-    }
+    if (!globeInstanceRef.current) return;
+    
+    const getCountryColor = (d) => {
+      return highlightedCountry === d.properties.name
+        ? highlightedCountryColors[d.properties.name]
+        : countryColors[d.properties.name];
+    };
+
+    const getCountryAltitude = (d) =>
+      d.properties.name === highlightedCountry ? 0.08 : 0.06;
+
+    globeInstanceRef.current
+      .polygonCapColor(getCountryColor)
+      .polygonAltitude(getCountryAltitude);
+      
   }, [highlightedCountry]);
 
   return (
-    <>
-      <div
-        ref={containerRef}
-        className="relative w-full"
+    <div 
+      ref={containerRef} 
+      className="relative w-full overflow-hidden" 
+      style={{ 
+        height: dimensions.height,
+        backgroundColor: "black" // Black background to prevent any grey flash
+      }}
+    >
+      {/* Background placeholder to prevent grey flash */}
+      <div className="absolute inset-0 z-0 bg-transparent"></div>
+      
+      {/* First video (starts as active) */}
+      <video
+        ref={currentVideoRef}
+        className="absolute inset-0 object-cover w-full h-full z-1"
+        src={activeVideoSrc}
+        autoPlay
+        loop
+        muted
+        playsInline
         style={{ 
-          height: dimensions.height,
+          opacity: 1,
+          transition: "none", // We handle transition manually
         }}
-      >
-        {/* Background image container with transition effect */}
-        <div 
-          className="absolute inset-0 z-0" 
-          style={{
-            backgroundImage: backgroundImage,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            transition: 'all 1s ease-in-out',
-            opacity: 0.4, // Dimmed background so the 3D countries are still visible
-          }}
-        />
-        
-        {/* Semi-transparent overlay */}
-        <div 
-          className="absolute inset-0 z-10"
-          style={{
-            backgroundColor: 'rgba(0, 0, 20, 0.7)',
-            transition: 'all 0.5s ease-in-out',
-          }}
-        />
-        
-        {/* Display current country name */}
-        {highlightedCountry && (
-          <div 
-            className="absolute left-0 right-0 z-30 text-center top-5"
-            style={{
-              color: '#FFFFFF',
-              fontSize: '2rem',
-              fontWeight: 'bold',
-              textShadow: '0 0 10px rgba(0, 0, 0, 0.8)',
-              transition: 'all 0.3s ease-in-out',
-            }}
-          >
-            {highlightedCountry}
-          </div>
-        )}
-        
-        {/* Globe container */}
+      />
+      
+      {/* Second video (for crossfade) */}
+      <video
+        ref={nextVideoRef}
+        className="absolute inset-0 object-cover w-full h-full z-1"
+        src={previousVideoSrc}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ 
+          opacity: 0,
+          transition: "none", // We handle transition manually
+        }}
+      />
+
+      {/* Semi-transparent overlay */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          backgroundColor: "rgba(0, 0, 20, 0.5)",
+          transition: "all 0.1s ease-in-out",
+        }}
+      />
+
+      {/* Display current country name */}
+      {highlightedCountry && (
         <div
-          ref={globeRef}
-          className="relative z-20"
+          className="absolute left-0 right-0 z-30 text-center top-5"
           style={{
-            width: "100%",
-            height: "100%",
-            maxWidth: "100vw",
-            overflow: "hidden",
+            color: "#FFFFFF",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            textShadow: "0 0 10px rgba(0, 0, 0, 0.8)",
+            transition: "all 0.3s ease-in-out",
           }}
-        />
-      </div>
-    </>
+        >
+          {highlightedCountry}
+        </div>
+      )}
+
+      {/* Globe container */}
+      <div
+        ref={globeRef}
+        className="relative z-20"
+        style={{
+          width: "100%",
+          height: "100%",
+          maxWidth: "100vw",
+          overflow: "hidden",
+        }}
+      />
+    </div>
   );
 };
 
