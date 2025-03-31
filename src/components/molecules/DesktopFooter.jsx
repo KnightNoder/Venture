@@ -81,7 +81,7 @@ const DesktopTabletFooter = () => {
       </div>
 
       {/* Bottom footer */}
-      <div className="bg-[#05073C] py-8">
+      <div className="bg-[#0E1E33] py-8">
         <div className="container flex flex-col items-center justify-between px-6 mx-auto md:flex-row">
           <div>
             <p className="text-sm text-white">© Copyright 2022, All Rights Reserved</p>

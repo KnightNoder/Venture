@@ -168,7 +168,7 @@ const MobileFooter = () => {
       </div>
 
       {/* Bottom footer */}
-      <div className="bg-[#05073C] py-6 px-6">
+      <div className="bg-[#0E1E33] py-6 px-6">
         <div className="mb-4">
           <p className="text-sm text-center">© Copyright 2022, All Rights Reserved</p>
         </div>
