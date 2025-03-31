@@ -202,7 +202,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
                 
                 // Reset next video opacity
                 if (nextVideoRef.current) {
-                  nextVideoRef.current.style.opacity = "0";
+                  nextVideoRef.current.style.opacity = ".5";
                 }
               }
             }
@@ -218,8 +218,8 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         
         if (nextVideoRef.current) {
           nextVideoRef.current.src = defaultVideo;
-          nextVideoRef.current.style.opacity = "0";
-          nextVideoRef.current.currentTime = 0;
+          nextVideoRef.current.style.opacity = "1";
+          nextVideoRef.current.currentTime = 1;
           
           // Similar transition logic...
           nextVideoRef.current.play().catch(e => console.log("Video play prevented:", e));
@@ -241,7 +241,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
               const temp = currentVideoRef.current;
               currentVideoRef.current = nextVideoRef.current;
               nextVideoRef.current = temp;
-              if (nextVideoRef.current) nextVideoRef.current.style.opacity = "0";
+              if (nextVideoRef.current) nextVideoRef.current.style.opacity = "1";
             }
           }
           
@@ -300,7 +300,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       className="relative w-full overflow-hidden" 
       style={{ 
         height: dimensions.height,
-        backgroundColor: "rgba(0,0,0,.25)" // Black background to prevent any grey flash
+        backgroundColor: "rgba(0,0,0,1)" // Black background to prevent any grey flash
       }}
     >
       {/* Background placeholder to prevent grey flash */}
@@ -316,7 +316,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         muted
         playsInline
         style={{ 
-          opacity: 1,
+          opacity: 0,
           transition: "none", // We handle transition manually
         }}
       />
