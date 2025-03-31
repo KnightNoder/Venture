@@ -205,15 +205,13 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         .showAtmosphere(false);
   
       const controls = globe.controls();
-      // Disable all controls to prevent movement and rotation
-      controls.enabled = false;      // Completely disable controls
+      // Disable rotation and movement but allow mouse interaction for clicking countries
+      controls.enabled = true;       // Enable controls for interaction
       controls.autoRotate = false;   // No auto-rotation
       controls.enableRotate = false; // No manual rotation
       controls.enablePan = false;    // No panning
       controls.enableZoom = false;   // No zooming
       controls.enableDamping = false;// No damping
-      controls.mouseButtons = {};    // Disable mouse buttons
-      controls.touches = {};         // Disable touch controls
   
       // Process GeoJSON data once
       const getCountryName = (feature) =>
@@ -441,9 +439,9 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
           width: "100%",
           height: "100%",
           maxWidth: "100vw",
-          pointerEvents: "none" // Additional security to prevent interaction
+          // Allow pointer events for country clicks
+          pointerEvents: "auto" 
         }}
-        onMouseDown={(e) => e.preventDefault()} // Extra prevention of drag
       />
     </div>
   );
