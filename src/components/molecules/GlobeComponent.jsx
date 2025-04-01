@@ -52,8 +52,8 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
 
   // Define country centroids for labels (approximate centers of countries)
   const countryCentroids = [
-    { lat: 45.6034, lng: 2.8883, name: 'France', country: 'France' },
-    { lat: 49.5657, lng: 9.4515, name: 'Germany', country: 'Germany' },
+    { lat: 46.0034, lng: 2.8883, name: 'France', country: 'France' },
+    { lat: 50.0657, lng: 9.4515, name: 'Germany', country: 'Germany' },
     { lat: 42.5047, lng: 12.5674, name: 'Italy', country: 'Italy' },
     { lat: 40.4637, lng: -2.7492, name: 'Spain', country: 'Spain' }
   ];
