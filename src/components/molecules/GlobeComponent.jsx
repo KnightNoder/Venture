@@ -50,12 +50,12 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     Spain: "rgba(198, 11, 30, 0.8)"    // Spanish flag red
   };
 
-  // Define capitals data for labels
-  const capitalLabels = [
-    { lat: 48.8566, lng: 2.3522, name: 'Paris', country: 'France' },
-    { lat: 52.5200, lng: 13.4050, name: 'Berlin', country: 'Germany' },
-    { lat: 41.9028, lng: 12.4964, name: 'Rome', country: 'Italy' },
-    { lat: 40.4168, lng: -3.7038, name: 'Madrid', country: 'Spain' }
+  // Define country centroids for labels (approximate centers of countries)
+  const countryCentroids = [
+    { lat: 45.6034, lng: 2.8883, name: 'France', country: 'France' },
+    { lat: 49.5657, lng: 9.4515, name: 'Germany', country: 'Germany' },
+    { lat: 42.5047, lng: 12.5674, name: 'Italy', country: 'Italy' },
+    { lat: 40.4637, lng: -2.7492, name: 'Spain', country: 'Spain' }
   ];
 
   // Debounce function to prevent too many video transitions
@@ -254,9 +254,9 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         .polygonCapColor((d) => countryColors[d.properties.name])
         .polygonAltitude(() => 0.06);
       
-      // Use HTML elements for labels instead of built-in labels
+      // Use HTML elements for country labels at centroids instead of capitals
       globe
-        .htmlElementsData(capitalLabels)
+        .htmlElementsData(countryCentroids)
         .htmlElement(d => {
           const el = document.createElement('div');
           el.className = 'country-label';
