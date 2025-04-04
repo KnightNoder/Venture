@@ -5,7 +5,6 @@ export default function ContactForm() {
     name: '',
     email: '',
     subject: '',
-    message: '',
     destinations: '',
     duration: '',
     adultCount: 1,
@@ -45,10 +44,6 @@ export default function ContactForm() {
       newErrors.subject = 'Subject is required';
     }
     
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
-    }
-
     if (!formData.destinations.trim()) {
       newErrors.destinations = 'Destination is required';
     }
@@ -93,7 +88,6 @@ export default function ContactForm() {
             name: formData.name,
             email: formData.email,
             subject: formData.subject,
-            message: formData.message,
             destinations: formData.destinations,
             duration: formData.duration,
             adultCount: formData.adultCount,
@@ -112,7 +106,6 @@ export default function ContactForm() {
             name: '',
             email: '',
             subject: '',
-            message: '',
             destinations: '',
             duration: '',
             adultCount: 1,
@@ -138,7 +131,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section className="flex flex-col items-start justify-center gap-10 p-10 mb-4 mt-28 md:mb-36 md:flex-row">
+    <section className="flex flex-col items-start justify-center gap-10 p-10 mb-4 md:mt-28 md:mb-36 md:flex-row">
       {/* Left: Contact Form */}
       <div className="w-full p-6 bg-white rounded-lg shadow-md md:w-2/3">
         {successMessage ? (
@@ -311,7 +304,7 @@ export default function ContactForm() {
                 <div>
                   <label className="block mb-1 text-sm font-medium text-gray-700">More Info</label>
                   <textarea
-                    rows="2"
+                    rows="4"
                     name="moreInfo"
                     value={formData.moreInfo}
                     onChange={handleChange}
@@ -320,20 +313,6 @@ export default function ContactForm() {
                   />
                 </div>
               </div>
-            </div>
-            
-            {/* Full width for message */}
-            <div className="mt-4">
-              <label className="block mb-1 text-sm font-medium text-gray-700">Message</label>
-              <textarea
-                rows="4"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Your Message"
-                className={`w-full p-3 border ${errors.message ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
-              />
-              {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
             </div>
             
             {errors.form && (
