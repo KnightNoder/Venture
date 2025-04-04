@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Icons from '../../assets/Icons/Icons';
 // import Logo from '../../assets/images/smallLogo.png'
-import Logo1 from '../../assets/images/smallLogo.png'
+import Logo1 from '../../assets/images/Logo Sqaure.png'
+// import Logo1 from '../../assets/images/smallLogo.png'
 
 
 const MobileFooter = () => {
@@ -28,7 +29,7 @@ const MobileFooter = () => {
         {/* Logo and description */}
         <div className="mb-8">
           <div className="flex items-center mb-4">
-            <img src={Logo1} className='w-10 h-10' alt="" srcset="" />
+            <img src={Logo1} className='w-20 h-10' alt="" srcset="" />
           </div>
           <p className="text-sm text-[#c9d0d9] leading-6">
           At Travellers Solution, our customers never have to worry about planning their vacation. Our high standards for customer service, good accommodations, and fun and exciting trips ensures that our travelers always receive the best when they choose us.
