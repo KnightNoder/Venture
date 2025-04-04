@@ -12,17 +12,16 @@ const TravelSection = ({ title }) => {
       {/* Heading */}
       <div className="flex-col items-start justify-between hidden w-full mb-6 md:visible md:flex-row md:flex">
         <div className="w-full md:max-w-1/2">
-          <h2 className="text-2xl font-bold">Fall into travel</h2>
+          <h2 className="text-2xl font-bold">Our Expertise</h2>
           <p className="max-w-full mt-1 text-gray-600">
-            Going somewhere to celebrate this season? Whether you’re going home
-            or somewhere to roam, we’ve got the travel tools to get you to your
-            destination.
+          We specialize in outbound tours and are renowned for our
+          expertise in premier destinations such as Europe, UK, Scandinavia, and beyond.
           </p>
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-1 mt-4 font-bold text-red-600 border border-red-600 rounded-md md:py-2 hover:bg-red-50">
-          SEE ALL
-        </button>
+        {/* <button className="flex items-center gap-2 px-4 py-1 mt-4 font-bold text-red-600 border border-red-600 rounded-md md:py-2 hover:bg-red-50">
+          Let's Connect
+        </button> */}
       </div>
 
       {/* Content Section */}
@@ -30,28 +29,26 @@ const TravelSection = ({ title }) => {
         {/* Left Card */}
         <div className="flex-1 p-6 rounded-lg bg-red-50">
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-bold text-red-600">
+            {/* <h3 className="text-2xl font-bold text-red-600">
               Backpacking {title}
-            </h3>
+            </h3> */}
 
             {/* Price Tag */}
-            <div className="px-3 py-1 text-red-600 bg-white rounded-md shadow-md">
+            {/* <div className="px-3 py-1 text-red-600 bg-white rounded-md shadow-md">
               <span className="text-xs text-gray-500">From</span>{" "}
               <strong>$700</strong>
-            </div>
+            </div> */}
           </div>
 
           <p className="mt-3 text-sm text-gray-700">
-            Traveling is a unique experience as it’s the best way to unplug from
-            the pushes and pulls of daily life. It helps us to forget about our
-            problems, frustrations, and fears at home. During our journey, we
-            experience life in different ways. We explore new places, cultures,
-            cuisines, traditions, and ways of living.
+          At Travellers Solution, our customers never have to worry about planning their vacation. Our high standards for customer service, good accommodations, and fun and exciting trips ensures that our travelers always receive the best when they choose us.
+          From offering comfortable buses and transportation to providing great hotels to delivering prompt customer service, we do our utmost to create a hassle-free travel experience.
+
           </p>
 
           {/* Button */}
           <button  onClick={()=> navigate('/contact-us')} className="w-full px-4 py-2 mt-4 font-bold text-red-500 bg-white rounded-md md:mt-32 hover:text-red-700 hover:bg-red-100">
-            BOOK FLIGHT
+            Let's Connect
           </button>
         </div>
 

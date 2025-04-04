@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AboutParis from '../../assets/images/AboutParis.png';
-import AboutSwiss from '../../assets/images/AboutSwiss.png';
-import AboutThailand from '../../assets/images/AboutThailand.png';
-import AboutTaiwan from '../../assets/images/AboutTaiwan.png';
-import AboutIndonesia from '../../assets/images/AboutIndonesia.png';
-import AboutSingapore from '../../assets/images/AboutSingapore.png';
+import AboutParis from '../../assets/images/AboutArmenia.png';
+import AboutSwiss from '../../assets/images/AboutLondon.png';
+import AboutThailand from '../../assets/images/AboutFinland.png';
+import AboutTaiwan from '../../assets/images/AboutPortugal.png';
+import AboutIndonesia from '../../assets/images/AboutNorway.png';
+import AboutSingapore from '../../assets/images/AboutCroatia.png';
 
 export default function PopularDestinations() {
   // Define our destinations data
   const navigate = useNavigate()
   const destinations = [
-    { name: "Paris", image: AboutParis },
-    { name: "Swiss", image: AboutSwiss },
-    { name: "Thailand", image: AboutThailand },
-    { name: "Taiwan", image: AboutTaiwan },
-    { name: "Indonesia", image: AboutIndonesia },
-    { name: "Singapore", image: AboutSingapore },
+    { name: "Armenia", image: AboutParis },
+    { name: "London", image: AboutSwiss },
+    { name: "Finland", image: AboutThailand },
+    { name: "Portugal", image: AboutTaiwan },
+    { name: "Norway", image: AboutIndonesia },
+    { name: "Croatia", image: AboutSingapore },
   ];
 
   // State for tracking current slide and auto-play functionality
@@ -101,7 +101,7 @@ export default function PopularDestinations() {
       <div className="mx-auto max-w-7xl">
         <div className="flex-col items-center justify-between mb-6 md:flex md:flex-row">
           <div>
-            <h2 className="text-3xl font-bold">Popular Destinations</h2>
+            <h2 className="text-3xl font-bold">Top Selling Destinations</h2>
             <p className="mt-2 text-gray-600">
               Explore our travelers' favorite destinations around the world.
             </p>
@@ -157,7 +157,7 @@ export default function PopularDestinations() {
                         ))}
                       </div>
                       <button  onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-4 text-red-500 transition border border-red-500 rounded hover:bg-red-500 hover:text-white">
-                        BOOK NOW
+                        Let's Connect
                       </button>
                     </div>
                   </div>

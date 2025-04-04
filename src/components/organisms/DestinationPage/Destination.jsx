@@ -20,7 +20,7 @@ const Destination = () => {
   return (
     <>
       <Header/>
-      <HeroSection title={country} description={"Enjoy your holiday with us"} image={image} />
+      <HeroSection title={"Services"} description={"Enjoy your holiday with us"} image={image} />
       <CountryOverview/>
       <HistoryAndCulture/>
       <TravelPage/>

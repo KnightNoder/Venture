@@ -327,7 +327,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
           const country = polygon.properties.name;
           const targetCity = cities?.find((city) => city.country === country);
           if (targetCity && targetCity.url) {
-            window.open(targetCity.url, "_blank");
+            // window.open(targetCity.url, "_blank");
           }
         }
       });

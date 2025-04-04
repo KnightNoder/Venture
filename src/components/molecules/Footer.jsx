@@ -31,9 +31,8 @@ const MobileFooter = () => {
             <img src={Logo1} className='w-10 h-10' alt="" srcset="" />
           </div>
           <p className="text-sm text-[#c9d0d9] leading-6">
-            Lorem ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem ipsum has been the industry's standard dummy
-            text ever since. Lorem ipsum is simply dummy text.
+          At Travellers Solution, our customers never have to worry about planning their vacation. Our high standards for customer service, good accommodations, and fun and exciting trips ensures that our travelers always receive the best when they choose us.
+
           </p>
         </div>
 
@@ -169,11 +168,11 @@ const MobileFooter = () => {
       {/* Bottom footer */}
       <div className="bg-[#0E1E33] py-6 px-6">
         <div className="mb-4">
-          <p className="text-sm text-center">© Copyright 2022, All Rights Reserved</p>
+          <p className="text-sm text-center">© Copyright 2025, All Rights Reserved</p>
         </div>
         <div className="flex justify-center space-x-6">
           <a href="#" className="text-sm text-[#8494a7] hover:text-white">Support</a>
-          <a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms & Conditins</a>
+          <a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms & Conditions</a>
           <a href="#" className="text-sm text-[#8494a7] hover:text-white">Privacy Policy</a>
         </div>
       </div>

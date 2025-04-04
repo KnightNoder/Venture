@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icons from '../../assets/Icons/Icons';
-import Logo1 from '../../assets/images/smallLogo.png'
+import Logo1 from '../../assets/images/Logo Sqaure.png'
+// import Logo1 from '../../assets/images/smallLogo.png'
 
 
 const DesktopTabletFooter = () => {
@@ -14,12 +15,11 @@ const DesktopTabletFooter = () => {
           {/* Logo and description column */}
           <div className="col-span-1">
             <div className="flex items-center mb-4">
-              <img src={Logo1 } className='w-15 h-15' alt="" srcset="" />
+              <img src={Logo1 } className='w-40 h-20 rounded-xl' alt="" srcset="" />
             </div>
             <p className="text-sm text-[#c9d0d9] leading-6 mb-6">
-              Lorem ipsum is simply dummy text of the printing and typesetting industry. 
-              Lorem ipsum has been the industry's standard dummy text ever 
-              since. Lorem ipsum is simply dummy text.
+            At Travellers Solution, our customers never have to worry about planning their vacation. Our high standards for customer service, good accommodations, and fun and exciting trips ensures that our travelers always receive the best when they choose us.
+
             </p>
             
             {/* Social Media Icons */}
@@ -84,11 +84,11 @@ const DesktopTabletFooter = () => {
       <div className="bg-[#0E1E33] py-8">
         <div className="container flex flex-col items-center justify-between px-6 mx-auto md:flex-row">
           <div>
-            <p className="text-sm text-white">© Copyright 2022, All Rights Reserved</p>
+            <p className="text-sm text-white">© Copyright 2025, All Rights Reserved</p>
           </div>
           <div className="flex mt-4 space-x-8 md:mt-0">
             <a href="#" className="text-sm text-[#8494a7] hover:text-white">Support</a>
-            <a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms & Conditins</a>
+            <a href="#" className="text-sm text-[#8494a7] hover:text-white">Terms & Conditions</a>
             <a href="#" className="text-sm text-[#8494a7] hover:text-white">Privacy Policy</a>
           </div>
         </div>

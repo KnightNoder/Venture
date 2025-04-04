@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import SubscribeImage from '../../assets/images/SubscribeImage.png';
+// import SubscribeImage from '../../assets/images/SubscribeImage.png';
+import SubscribeImage from '../../assets/images/Subscribe.png';
 
 const SubscribeSection = () => {
   const [email, setEmail] = useState('');
@@ -22,12 +23,11 @@ const SubscribeSection = () => {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-md px-4">
-        <h2 className="mb-4 text-4xl font-bold">
-          Subcribe to get special price
+        <h2 className="mb-4 text-lg font-bold md:text-4xl">
+        Get a 5,000 INR discount on your first trip by signing up for email.
         </h2>
         <p className="mb-8 text-sm opacity-90">
-          Don't wanna miss something? subscribe right now and get special
-          promotion and monthly newsletter
+        Plus, receive travel inspiration, news, and latest sales.
         </p>
 
         {/* Subscription Input - Mobile Optimized */}

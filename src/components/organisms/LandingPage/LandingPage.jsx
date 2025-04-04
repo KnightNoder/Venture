@@ -23,7 +23,7 @@ const LandingPage = () => {
   return (
     <>
       <Header/>
-      <HeroSection title={'Start your journey with us'} description={'Enjoy your holiday with us'} image={HeroImage}/>
+      <HeroSection title={"Experience the places you've always dreamed of"} description={'Customized trips designed from India to Europe & beyond'} image={HeroImage}/>
       <WhyChooseUs/>
       
       {/* Globe Section with Custom Globe */}
@@ -45,7 +45,7 @@ const LandingPage = () => {
       {/* <EuropeanMapComponent2/> */}
       {/* <EuropeanMapComponent3/> */}
       <TravelSection title='Germany'/>
-      <Testimonials/>
+      {/* <Testimonials/> */}
       <ResponsiveFooter/>
     </>
   )

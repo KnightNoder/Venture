@@ -12,7 +12,7 @@ const Contact = () => {
   return (
     <div>
       <Header/>
-      <HeroSection title={'Contact us'} description={'Enjoy your holiday with us'} image={ContactUsImage}/>
+      <HeroSection title={'Contact us'} description={"Let’s plan your next trip with us"} image={ContactUsImage}/>
       <ContactForm/>
       <SubscribeSection/>
       <ResponsiveFooter/>
