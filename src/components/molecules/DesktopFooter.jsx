@@ -24,17 +24,14 @@ const DesktopTabletFooter = () => {
             
             {/* Social Media Icons */}
             <div className="flex">
-              <a href="#" className="w-10 h-10 bg-[#3b4a5f] rounded-full flex items-center justify-center mr-3">
+              <a href="#" className="w-10 h-10 bg-[#3b4a5f] hover:bg-red-500 rounded-full flex items-center justify-center mr-3">
                 <Icons variant="twitter" />
               </a>
-              <a href="#" className="w-10 h-10 bg-[#f13b3f] rounded-full flex items-center justify-center mr-3">
+              <a href="#" className="w-10 h-10 bg-[#3b4a5f] hover:bg-red-500 rounded-full flex items-center justify-center mr-3">
                 <Icons variant="facebook" />
               </a>
-              <a href="#" className="w-10 h-10 bg-[#3b4a5f] rounded-full flex items-center justify-center mr-3">
+              <a href="#" className="w-10 h-10 bg-[#3b4a5f] hover:bg-red-500 rounded-full flex items-center justify-center mr-3">
                 <Icons variant="instagram" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-[#3b4a5f] rounded-full flex items-center justify-center">
-                <Icons variant="github" />
               </a>
             </div>
           </div>

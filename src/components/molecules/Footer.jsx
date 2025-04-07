@@ -39,17 +39,14 @@ const MobileFooter = () => {
 
         {/* Social Media Links */}
         <div className="flex mb-8">
-          <a href="#" className="w-12 h-12 bg-[#3b4a5f] rounded-full flex items-center justify-center mr-4">
+          <a href="#" className="w-12 h-12 bg-[#3b4a5f] hover:bg-red-500 rounded-full flex items-center justify-center mr-4">
             <Icons variant="twitter" />
           </a>
-          <a href="#" className="w-12 h-12 bg-[#f13b3f] rounded-full flex items-center justify-center mr-4">
+          <a href="#" className="w-12 h-12 bg-[#3b4a5f] hover:bg-red-500 rounded-full flex items-center justify-center mr-4">
             <Icons variant="facebook" />
           </a>
-          <a href="#" className="w-12 h-12 bg-[#3b4a5f] rounded-full flex items-center justify-center mr-4">
+          <a href="#" className="w-12 h-12 bg-[#3b4a5f] hover:bg-red-500 rounded-full flex items-center justify-center mr-4">
             <Icons variant="instagram" />
-          </a>
-          <a href="#" className="w-12 h-12 bg-[#3b4a5f] rounded-full flex items-center justify-center">
-            <Icons variant="github" />
           </a>
         </div>
 
