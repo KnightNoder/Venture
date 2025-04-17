@@ -29,32 +29,43 @@ experiences.`,
     title: "Trusted by Leading Travel Agents",
     description: "Numerous top travel agencies across India choose us as their preferred partner for European travel. Our consistent quality and dependability build lasting trust.",
     icon: <Icons variant={"memory"} />,
-
   },
   {
     title: "Dedicated Account Management",
     description: "Every partner is supported by a dedicated travel expert. This ensures personalized service, efficient coordination, and hassle-free execution for every booking.",
     icon: <Icons variant={"flexible"} />,
-
   },
 ];
 
 const WhyChooseUs = () => {
   return (
-    <section className="bg-[#FDF6F3] py-12 md:py-16 px-2 md:px-16 lg:px-48 md:bg-[#f8f5f2] text-black">
-      <h2 className="text-2xl px-4 text md:text-left md:text-2xl font-bold text-[#0a0a40] mb-6 md:mb-10">
+    <section className="bg-[#FDF6F3] py-12 md:py-16 px-4 md:px-16 lg:px-48 md:bg-[#f8f5f2] text-black">
+      <h2 className="text-2xl text-center md:text-3xl font-bold text-[#0a0a40] mb-10 md:mb-12">
         Why choose Travellers Solution
       </h2>
-      <div className="grid grid-cols-2 px-6 md:grid-cols-4 gap-x-6 gap-y-8 md:gap-6">
-        {features.map((feature, index) => (
-          <div key={index} className="flex flex-col items-start">
-            <div className="flex items-center justify-center w-12 h-12">
-              <div className="text-[#ff1b1c]">{feature.icon}</div>
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 gap-8 mb-8 md:grid-cols-3 md:gap-10 md:mb-10">
+          {features.slice(0, 3).map((feature, index) => (
+            <div key={index} className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center mb-4 w-14 h-14">
+                <div className="text-[#ff1b1c]">{feature.icon}</div>
+              </div>
+              <h3 className="text-lg font-semibold text-[#0a0a40] mb-2">{feature.title}</h3>
+              <p className="text-sm text-gray-700">{feature.description}</p>
             </div>
-            <h3 className="mt-3 text-md font-semibold text-[#0a0a40]">{feature.title}</h3>
-            <p className="mt-1 text-sm text-gray-700">{feature.description}</p>
-          </div>
-        ))}
+          ))}
+        </div>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
+          {features.slice(3, 6).map((feature, index) => (
+            <div key={index} className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center mb-4 w-14 h-14">
+                <div className="text-[#ff1b1c]">{feature.icon}</div>
+              </div>
+              <h3 className="text-lg font-semibold text-[#0a0a40] mb-2">{feature.title}</h3>
+              <p className="text-sm text-gray-700">{feature.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
