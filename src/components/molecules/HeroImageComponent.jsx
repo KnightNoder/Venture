@@ -18,7 +18,7 @@ const HeroSection = ({image, title, description }) => {
       {/* Content */}
       <div className="relative z-10">
         <h1 className="text-3xl font-bold w-full md:w-[800px] md:text-6xl">
-          {firstLine} {secondLine}
+          {firstLine} 
         </h1>
         <p className="mt-2 text-lg md:text-xl">{description}</p>
       </div>

@@ -3,26 +3,39 @@ import Icons from "../../assets/Icons/Icons";
 
 const features = [
   {
-    title: "Ultimate flexibility",
+    title: "Expertise in European Travel",
     description:
-      "You're in control, with free cancellation and payment options to satisfy any plan or budget.",
+      `Travellers Solution specializes in European outbound tours, backed by in-depth regional knowledge. This ensures expertly curated itineraries and seamless travel
+experiences.`,
     icon: <Icons variant={"flexible"} />,
   },
   {
-    title: "Memorable experiences",
+    title: "Comprehensive B2B Services",
     description:
-      "Browse and book tours and activities so incredible, you'll want to tell your friends.",
+      `We offer a wide range of travel solutions, including FITs, Van Tours, Self-drive, and Ad-hoc group tours. Our flexible approach caters to the unique requirements of each client.`,
     icon: <Icons variant={"memory"} />,
   },
   {
-    title: "Quality at our core",
-    description: "High-quality standards. Millions of reviews. A tourz company.",
+    title: "Strong Industry Network",
+    description: "With a robust network of trusted partners across Europe, we secure the best deals and premium services. This guarantees exceptional value and reliable support throughout the journey.",
     icon: <Icons variant={"quality"} />,
   },
   {
-    title: "Award-winning support",
-    description: "New price? New plan? No problem. We're here to help, 24/7.",
+    title: "Customer-Centric Approach",
+    description: "We prioritize client satisfaction through prompt support and tailored travel planning. Our goal is to create memorable experiences that foster long-term partnerships",
     icon: <Icons variant={"awards"} />,
+  },
+  {
+    title: "Trusted by Leading Travel Agents",
+    description: "Numerous top travel agencies across India choose us as their preferred partner for European travel. Our consistent quality and dependability build lasting trust.",
+    icon: <Icons variant={"memory"} />,
+
+  },
+  {
+    title: "Dedicated Account Management",
+    description: "Every partner is supported by a dedicated travel expert. This ensures personalized service, efficient coordination, and hassle-free execution for every booking.",
+    icon: <Icons variant={"flexible"} />,
+
   },
 ];
 

@@ -29,11 +29,11 @@ const MobileFooter = () => {
         {/* Logo and description */}
         <div className="mb-8">
           <div className="flex items-center mb-4">
-            <img src={Logo1} className='w-20 h-10' alt="" srcset="" />
+            <img src={Logo1} className='w-20 h-10' alt="" srcSet="" />
           </div>
           <p className="text-sm text-[#c9d0d9] leading-6">
-          At Travellers Solution, our customers never have to worry about planning their vacation. Our high standards for customer service, good accommodations, and fun and exciting trips ensures that our travelers always receive the best when they choose us.
-
+          Your Trusted B2B Destination Management Partner – Crafting expertly curated journeys across
+Europe, Georgia, Armenia, and beyond
           </p>
         </div>
 

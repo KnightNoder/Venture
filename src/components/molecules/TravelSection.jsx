@@ -40,10 +40,11 @@ const TravelSection = ({ title }) => {
             </div> */}
           </div>
 
-          <p className="mt-3 text-sm text-gray-700">
-          At Travellers Solution, our customers never have to worry about planning their vacation. Our high standards for customer service, good accommodations, and fun and exciting trips ensures that our travelers always receive the best when they choose us.
-          From offering comfortable buses and transportation to providing great hotels to delivering prompt customer service, we do our utmost to create a hassle-free travel experience.
-
+          <p className="mt-3 text-base text-gray-700">
+          At Travellers Solution, we take the stress out of vacation planning so our customers can focus on what truly matters—making unforgettable memories. With a strong
+commitment to exceptional service, quality accommodations, and thoughtfully curated travel experiences, we go above and beyond to ensure every journey is seamless
+and enjoyable. From providing reliable transportation and handpicked hotels to delivering timely and attentive support, we’re here to make every step of the travel
+experience smooth, comfortable, and truly memorable.
           </p>
 
           {/* Button */}

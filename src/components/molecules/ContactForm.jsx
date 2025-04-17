@@ -2,14 +2,16 @@ import { useState } from 'react';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
+    companyName: '',
     email: '',
-    subject: '',
+    contactNumber: '',
     destinations: '',
     duration: '',
     adultCount: 1,
-    childrenCount: 0,
-    infantCount: 0,
+    childrenCount: 0, // CHD (Between 2yrs-12yrs)
+    infantCount: 0, // Infants (Between 0.1-2yrs)
     hotelCategory: '',
     transportType: 'FIT',
     purposeOfVisit: '',
@@ -20,7 +22,7 @@ export default function ContactForm() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState({});
 
-  const hotelCategories = ["Budget", "Standard", "Premium", "Luxury"];
+  const hotelCategories = ["3*", "4*", "5*", "Premium Luxury"];
   const transportOptions = [
     { value: 'FIT', label: 'FIT (Free Independent Traveler)' },
     { value: 'VAN', label: 'VAN (Group Transportation)' }
@@ -30,8 +32,12 @@ export default function ContactForm() {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    }
+    
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
     }
     
     if (!formData.email.trim()) {
@@ -40,8 +46,8 @@ export default function ContactForm() {
       newErrors.email = 'Email is invalid';
     }
     
-    if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required';
+    if (!formData.contactNumber.trim()) {
+      newErrors.contactNumber = 'Contact number is required';
     }
     
     if (!formData.destinations.trim()) {
@@ -75,7 +81,7 @@ export default function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const scriptURL = "https://script.google.com/macros/s/AKfycbzzbhkWCGd3K9mkkILW_mDSncXksP287KzrxFTiVeCdjuPht8XdOT-l5i5mmzH5celi/exec";
+      const scriptURL = "https://script.google.com/macros/s/AKfycbwTBgk6OGL5hWUM_hK2fBXzhJUsdbqZjblYOxZCiHqAKveRlDVy2vBRrXY1u4cZ7Fp_/exec";
       
       try {
         setLoading(true);
@@ -85,9 +91,11 @@ export default function ContactForm() {
             "Content-Type": "text/plain;charset=utf-8",
           },
           body: JSON.stringify({
-            name: formData.name,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            companyName: formData.companyName,
             email: formData.email,
-            subject: formData.subject,
+            contactNumber: formData.contactNumber,
             destinations: formData.destinations,
             duration: formData.duration,
             adultCount: formData.adultCount,
@@ -103,9 +111,11 @@ export default function ContactForm() {
         if (response.ok) {
           setSuccessMessage("Thank you for your message. We'll get back to you soon with a travel plan!");
           setFormData({
-            name: '',
+            firstName: '',
+            lastName: '',
+            companyName: '',
             email: '',
-            subject: '',
+            contactNumber: '',
             destinations: '',
             duration: '',
             adultCount: 1,
@@ -147,20 +157,45 @@ export default function ContactForm() {
               {/* Left Column */}
               <div className="space-y-4">
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">Your Name</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">First Name</label>
                   <input
                     type="text"
-                    name="name"
-                    value={formData.name}
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleChange}
-                    placeholder="Your Name"
-                    className={`w-full p-3 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+                    placeholder="First Name"
+                    className={`w-full p-3 border ${errors.firstName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
                   />
-                  {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+                  {errors.firstName && <p className="mt-1 text-sm text-red-500">{errors.firstName}</p>}
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">Your Email</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                    className={`w-full p-3 border ${errors.lastName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+                  />
+                  {errors.lastName && <p className="mt-1 text-sm text-red-500">{errors.lastName}</p>}
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Company Name</label>
+                  <input
+                    type="text"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    placeholder="Company Name (Optional)"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
                   <input
                     type="email"
                     name="email"
@@ -173,16 +208,16 @@ export default function ContactForm() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">Subject</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Contact Number</label>
                   <input
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
+                    type="tel"
+                    name="contactNumber"
+                    value={formData.contactNumber}
                     onChange={handleChange}
-                    placeholder="Subject"
-                    className={`w-full p-3 border ${errors.subject ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+                    placeholder="Contact Number"
+                    className={`w-full p-3 border ${errors.contactNumber ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
                   />
-                  {errors.subject && <p className="mt-1 text-sm text-red-500">{errors.subject}</p>}
+                  {errors.contactNumber && <p className="mt-1 text-sm text-red-500">{errors.contactNumber}</p>}
                 </div>
 
                 <div>
@@ -192,7 +227,7 @@ export default function ContactForm() {
                     name="destinations"
                     value={formData.destinations}
                     onChange={handleChange}
-                    placeholder="Country to visit"
+                    placeholder="Countries/Cities to visit"
                     className={`w-full p-3 border ${errors.destinations ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
                   />
                   {errors.destinations && <p className="mt-1 text-sm text-red-500">{errors.destinations}</p>}
@@ -209,22 +244,6 @@ export default function ContactForm() {
                     className={`w-full p-3 border ${errors.duration ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
                   />
                   {errors.duration && <p className="mt-1 text-sm text-red-500">{errors.duration}</p>}
-                </div>
-
-                <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">Hotel Category</label>
-                  <select
-                    name="hotelCategory"
-                    value={formData.hotelCategory}
-                    onChange={handleChange}
-                    className={`w-full p-3 border ${errors.hotelCategory ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
-                  >
-                    <option value="">Select hotel category</option>
-                    {hotelCategories.map(category => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
-                  {errors.hotelCategory && <p className="mt-1 text-sm text-red-500">{errors.hotelCategory}</p>}
                 </div>
               </div>
               
@@ -243,7 +262,7 @@ export default function ContactForm() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">No. of Children</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">No. of Children (2-12 yrs)</label>
                   <input
                     type="number"
                     name="childrenCount"
@@ -255,7 +274,7 @@ export default function ContactForm() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">No. of Infants</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">No. of Infants (0.1-2 yrs)</label>
                   <input
                     type="number"
                     name="infantCount"
@@ -264,6 +283,22 @@ export default function ContactForm() {
                     onChange={handleChange}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                   />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Hotel Category</label>
+                  <select
+                    name="hotelCategory"
+                    value={formData.hotelCategory}
+                    onChange={handleChange}
+                    className={`w-full p-3 border ${errors.hotelCategory ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+                  >
+                    <option value="">Select hotel category</option>
+                    {hotelCategories.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                  {errors.hotelCategory && <p className="mt-1 text-sm text-red-500">{errors.hotelCategory}</p>}
                 </div>
                 
                 <div>
@@ -332,7 +367,7 @@ export default function ContactForm() {
         )}
       </div>
 
-      {/* Right: Contact Info - Kept as is */}
+      {/* Right: Contact Info */}
       <div className="w-full px-2 md:px-12 md:w-1/3">
         <h2 className="text-2xl font-bold">Get In Touch</h2>
         <p className="mt-2 text-gray-600">
@@ -344,7 +379,7 @@ export default function ContactForm() {
 
         <div className="mt-10 space-y-6">
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Sai Spring plot no 5, 2005, Sector 35G Kharghar Navi Mumbai Maharashtra India 410210.</h3>
+              <h3 className="text-lg font-semibold">Navi Mumba , Maharashtra , India - 410210</h3>
               <div className="flex items-center space-x-2 text-gray-700">
                 <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M6.6 2a2 2 0 0 0-2 2c0 9.4 7.6 17 17 17a2 2 0 0 0 2-2v-3a2 2 0 0 0-1.8-2 12.8 12.8 0 0 1-4-1 2 2 0 0 0-2 .4l-2.2 1.7a14 14 0 0 1-6.8-6.8L9 8a2 2 0 0 0 .4-2 12.8 12.8 0 0 1-1-4A2 2 0 0 0 6.6 2Z" />

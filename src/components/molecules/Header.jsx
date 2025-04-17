@@ -31,7 +31,7 @@ const Header = () => {
                 d="M2.25 3C2.25 2.42 2.67 2 3.25 2H5.75C6.3 2 6.72 2.42 6.72 3C6.72 3.94 6.94 4.84 7.33 5.64C7.65 6.31 7.45 7.1 6.86 7.52L5.59 8.46C7.09 11.33 9.67 13.91 12.54 15.41L13.48 14.14C13.9 13.55 14.69 13.35 15.36 13.67C16.16 14.06 17.06 14.28 18 14.28C18.58 14.28 19 14.7 19 15.25V17.75C19 18.33 18.58 18.75 18 18.75C9.56 18.75 2.75 11.94 2.75 3.5V3Z"
               />
             </svg>
-            <span>+91-9768004545</span>
+            <a href="tel:+919768004545" className="hover:underline">+91-9768004545</a>
           </div>
           <div className="flex items-center space-x-2">
             <svg
@@ -48,7 +48,7 @@ const Header = () => {
                 d="M3 5h18M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
-            <span> inquiry@travellerssolution.com</span>
+            <a href="mailto:inquiry@travellerssolution.com" className="hover:underline">inquiry@travellerssolution.com</a>
           </div>
         </div>
       </div>
@@ -58,12 +58,13 @@ const Header = () => {
 
       {/* Main header with navigation */}
       <header className="relative w-full bg-white">
-        <nav className="flex items-center justify-between px-4 py-3 bg-white md:px-10">
+        <nav className="flex items-center justify-between px-4 py-1 bg-white md:px-10">
           <div 
             onClick={() => navigate('/')} 
             className="flex items-center space-x-2 text-lg font-bold text-blue-500 cursor-pointer md:ml-12 lg:ml-48"
           >
-            <img className='w-20 h-10' src={Logo} alt="Logo" />
+            <img className='w-33 h-17' src={Logo} alt="Logo" />
+            {/* <img className='w-20 h-10' src={Logo} alt="Logo" /> */}
           </div>
 
           {/* Desktop Menu */}
@@ -247,7 +248,7 @@ const Header = () => {
                     d="M2.25 3C2.25 2.42 2.67 2 3.25 2H5.75C6.3 2 6.72 2.42 6.72 3C6.72 3.94 6.94 4.84 7.33 5.64C7.65 6.31 7.45 7.1 6.86 7.52L5.59 8.46C7.09 11.33 9.67 13.91 12.54 15.41L13.48 14.14C13.9 13.55 14.69 13.35 15.36 13.67C16.16 14.06 17.06 14.28 18 14.28C18.58 14.28 19 14.7 19 15.25V17.75C19 18.33 18.58 18.75 18 18.75C9.56 18.75 2.75 11.94 2.75 3.5V3Z"
                   />
                 </svg>
-                <span>+91-9768004545</span>
+                <a href="tel:+919768004545" className="hover:underline">+91-9768004545</a>
               </div>
               <div className="flex items-center space-x-2">
                 <svg
@@ -264,7 +265,7 @@ const Header = () => {
                     d="M3 5h18M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <span> inquiry@travellerssolution.com</span>
+                <a href="mailto:inquiry@travellerssolution.com" className="hover:underline">inquiry@travellerssolution.com</a>
               </div>
             </div>
           </div>

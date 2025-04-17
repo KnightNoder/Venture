@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Footer from '../../molecules/Footer'
 import Header from '../../molecules/Header'
 import HeroSection from '../../molecules/HeroImageComponent'
@@ -9,6 +9,9 @@ import ResponsiveFooter from '../../molecules/ResponsiveFooter';
 
 
 const Contact = () => {
+  useEffect(()=>{
+    window.scrollTo(0, 0)
+  },[])
   return (
     <div>
       <Header/>

@@ -22,9 +22,10 @@ const SubscribeSection = () => {
       <div className="absolute inset-0"></div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-md px-4">
+      <div className="relative z-10 w-full max-w-2xl px-4">
         <h2 className="mb-4 text-lg font-bold md:text-4xl">
-        Get a 5,000 INR discount on your first trip by signing up for email.
+        Skip the FOMO—discover where elegance meets adventure
+        <h2>Subscribe now!</h2>
         </h2>
         <p className="mb-8 text-sm opacity-90">
         Plus, receive travel inspiration, news, and latest sales.

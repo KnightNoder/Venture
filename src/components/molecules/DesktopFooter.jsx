@@ -15,10 +15,11 @@ const DesktopTabletFooter = () => {
           {/* Logo and description column */}
           <div className="col-span-1">
             <div className="flex items-center mb-4">
-              <img src={Logo1 } className='w-40 h-20 rounded-xl' alt="" srcset="" />
+              <img src={Logo1 } className='w-40 h-20 rounded-xl' alt="" srcSet="" />
             </div>
             <p className="text-sm text-[#c9d0d9] leading-6 mb-6">
-            At Travellers Solution, our customers never have to worry about planning their vacation. Our high standards for customer service, good accommodations, and fun and exciting trips ensures that our travelers always receive the best when they choose us.
+            Your Trusted B2B Destination Management Partner – Crafting expertly curated journeys across
+Europe, Georgia, Armenia, and beyond
 
             </p>
             
