@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Globe from "globe.gl";
 import europeGeoJSON from "./geoJson.json"; // Import your Natural Earth GeoJSON file
-import FranceVideo from "/videos/France3.mp4";
-import GermanyVideo from "/videos/Germany3.mp4";
-import ItalyVideo from "/videos/Italy3.mp4";
-import SpainVideo from "/videos/Spain3.mp4";
+import FranceVideo from "/videos/France4.mp4";
+import GermanyVideo from "/videos/Germany4.mp4";
+import ItalyVideo from "/videos/Italy4.mp4";
+import SpainVideo from "/videos/Spain4.mp4";
 
 const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const globeRef = useRef(null);
