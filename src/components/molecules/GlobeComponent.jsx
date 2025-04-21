@@ -35,6 +35,75 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   // Define visible countries
   const visibleCountries = ["France", "Germany", "Spain", "Italy"];
 
+  const processEuropeanTerritories = useCallback((features) => {
+    const getCountryName = (feature) =>
+      feature.properties.NAME ||
+      feature.properties.name ||
+      feature.properties.ADMIN ||
+      feature.properties.NAME_LONG ||
+      "";
+    
+    // First filter for countries we want to display
+    let filteredFeatures = features.filter((feature) => {
+      const countryName = getCountryName(feature);
+      return visibleCountries.includes(countryName);
+    });
+    
+    // Process each feature - special handling for France
+    const processedFeatures = filteredFeatures.map(feature => {
+      const countryName = getCountryName(feature);
+      
+      // Only need special processing for France (to exclude French Guiana, etc.)
+      if (countryName === "France" && 
+          feature.geometry && 
+          feature.geometry.type === "MultiPolygon") {
+        
+        // Create a new feature with the same properties
+        const europeanFrance = {
+          ...feature,
+          geometry: {
+            ...feature.geometry,
+            coordinates: [] // We'll filter coordinates to include only European parts
+          }
+        };
+        
+        // Filter the coordinates to include only European polygons
+        feature.geometry.coordinates.forEach(polygon => {
+          // Sample the first coordinate from the polygon to check if it's in Europe
+          const sampleCoord = polygon[0][0];
+          const longitude = sampleCoord[0];
+          const latitude = sampleCoord[1];
+          
+          // Define rough bounds for continental Europe
+          const inEurope = longitude > -10 && longitude < 40 && 
+                           latitude > 36 && latitude < 70;
+          
+          if (inEurope) {
+            // If this polygon is in Europe, keep it
+            europeanFrance.geometry.coordinates.push(polygon);
+          }
+        });
+        
+        return europeanFrance;
+      }
+      
+      // For other countries, no special processing needed
+      return feature;
+    });
+    
+    // Transform to the format needed for globe.gl
+    return processedFeatures.map((feature) => {
+      const countryName = getCountryName(feature);
+      return {
+        properties: {
+          name: countryName,
+          id: countryName.toLowerCase(),
+        },
+        geometry: feature.geometry,
+      };
+    });
+  }, [visibleCountries]);
+
   // Define country-specific colors - using constants to avoid recreating objects
   const countryColors = { 
     France: "rgba(0, 35, 149, 0.3)",  // French flag blue
@@ -259,29 +328,8 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       controls.enableZoom = false;   // No zooming
       controls.enableDamping = false;// No damping
   
-      // Process GeoJSON data once
-      const getCountryName = (feature) =>
-        feature.properties.NAME ||
-        feature.properties.name ||
-        feature.properties.ADMIN ||
-        feature.properties.NAME_LONG ||
-        "";
-  
-      const filteredFeatures = europeGeoJSON.features.filter((feature) => {
-        const countryName = getCountryName(feature);
-        return visibleCountries.includes(countryName);
-      });
-  
-      const polygonsData = filteredFeatures.map((feature) => {
-        const countryName = getCountryName(feature);
-        return {
-          properties: {
-            name: countryName,
-            id: countryName.toLowerCase(),
-          },
-          geometry: feature.geometry,
-        };
-      });
+      // Process GeoJSON data with our new function
+      const polygonsData = processEuropeanTerritories(europeGeoJSON.features);
       
       // Set the data once and never change it
       globe
