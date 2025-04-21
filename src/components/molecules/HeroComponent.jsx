@@ -28,12 +28,12 @@ experiences.`,
   {
     title: "Trusted by Leading Travel Agents",
     description: "Numerous top travel agencies across India choose us as their preferred partner for European travel. Our consistent quality and dependability build lasting trust.",
-    icon: <Icons variant={"memory"} />,
+    icon: <Icons variant={"shield"} />,
   },
   {
     title: "Dedicated Account Management",
     description: "Every partner is supported by a dedicated travel expert. This ensures personalized service, efficient coordination, and hassle-free execution for every booking.",
-    icon: <Icons variant={"flexible"} />,
+    icon: <Icons variant={"account"} />,
   },
 ];
 
