@@ -68,8 +68,8 @@ const Header = () => {
           </div>
 
           {/* Desktop Menu */}
-          <ul className="hidden space-x-6 text-sm font-medium text-gray-700 md:flex md:mr-12 lg:mr-48">
-            <li onClick={() => navigate('/about')} className="cursor-pointer hover:text-blue-500">ABOUT</li>
+          <ul className="hidden space-x-6 font-medium text-gray-700 text-md md:flex md:mr-12 lg:mr-48">
+            <li onClick={() => navigate('/about')} className="cursor-pointer hover:text-blue-500">ABOUT US</li>
             {/* <li className="flex items-center cursor-pointer hover:text-blue-500">
               OUR SERVICES
               <svg

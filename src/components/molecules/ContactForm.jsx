@@ -27,7 +27,7 @@ export default function ContactForm() {
     { value: 'FIT', label: 'FIT (Free Independent Traveler)' },
     { value: 'VAN', label: 'VAN (Group Transportation)' }
   ];
-  const purposeOptions = ["Tourism", "Business", "Education", "Family Visit", "Other"];
+  const purposeOptions = ["Tourism","Others"];
 
   const validateForm = () => {
     const newErrors = {};
@@ -379,7 +379,7 @@ export default function ContactForm() {
 
         <div className="mt-10 space-y-6">
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Navi Mumba , Maharashtra , India - 410210</h3>
+              <h3 className="text-lg font-semibold">Navi Mumbai , Maharashtra , India - 410210</h3>
               <div className="flex items-center space-x-2 text-gray-700">
                 <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M6.6 2a2 2 0 0 0-2 2c0 9.4 7.6 17 17 17a2 2 0 0 0 2-2v-3a2 2 0 0 0-1.8-2 12.8 12.8 0 0 1-4-1 2 2 0 0 0-2 .4l-2.2 1.7a14 14 0 0 1-6.8-6.8L9 8a2 2 0 0 0 .4-2 12.8 12.8 0 0 1-1-4A2 2 0 0 0 6.6 2Z" />

@@ -13,17 +13,20 @@ const TouristAttractions = () => {
       <div className="md:w-1/2">
         <h2 className="mb-4 text-3xl font-bold text-black">Tourist Attractions</h2>
         <p className="mb-4 text-lg text-gray-700">
-          England is a popular tourist destination, with many attractions and activities to suit all interests. Some of the top tourist attractions in England include:
+          France is home to some of the world's most iconic landmarks and attractions, drawing millions of visitors 
+          each year. From magnificent architectural wonders to natural landscapes, here are some must-visit places:
         </p>
         <ul className="w-full space-y-3 list-none">
           {[
-            "Buckingham Palace: the official residence of the British monarch, located in London.",
-            "Stonehenge: a prehistoric monument located in Wiltshire, believed to have been built around 3000 BC.",
-            "The Lake District: a national park in northwest England, known for its stunning lakes, mountains, and forests.",
-            "Oxford University: a world-renowned university located in Oxford, known for its stunning architecture, beautiful gardens, and rich history."
+            "Eiffel Tower: The iconic symbol of Paris and France, offering panoramic views of the city.",
+            "Louvre Museum: Home to thousands of artworks including the famous Mona Lisa.",
+            "Mont-Saint-Michel: A magical island abbey off Normandy's coast with medieval architecture.",
+            "Palace of Versailles: Stunning royal residence with exquisite gardens and Hall of Mirrors.",
+            "French Riviera: Glamorous beaches and festivals in Nice, Cannes, and Saint-Tropez.",
+            "Loire Valley: Famous for its magnificent châteaux, vineyards, and scenic drives."
           ].map((attraction, index) => (
             <li key={index} className="flex gap-3">
-              <Icons variant="left-marker" className="flex-shrink-0 w-6 h-6" />
+              {Icons && <Icons variant="left-marker" className="flex-shrink-0 w-6 h-6" />}
               <span className="text-lg text-gray-700">{attraction}</span>
             </li>
           ))}
@@ -36,7 +39,7 @@ const TouristAttractions = () => {
           <img
             key={index}
             src={src}
-            alt="England attraction"
+            alt="France attraction"
             className={`object-cover w-[200px] h-64 rounded-md shadow-md ${
               index % 2 === 0 ? "mt-0" : "mt-6"
             }`} // Zig-zag effect
@@ -51,13 +54,13 @@ const TouristAttractions = () => {
 
 
 const PopularPlaces = () => {
-  // Sample data for places
-  const navigate = useNavigate()
+  // Sample data for places in France
+  const navigate = useNavigate();
   const places = [
-    { name: "Melbourne", price: 700, image: Tourist1 },
-    { name: "Paris", price: 600, image: Tourist2 },
-    { name: "London", price: 350, image: Tourist3 },
-    { name: "Columbia", price: 700, image: Tourist4 },
+    { name: "Paris", price: 600, image: Tourist1 },
+    { name: "Nice", price: 500, image: Tourist2 },
+    { name: "Bordeaux", price: 450, image: Tourist3 },
+    { name: "Lyon", price: 400, image: Tourist4 },
   ];
 
   // State for tracking current slide in the carousel
@@ -125,7 +128,7 @@ const PopularPlaces = () => {
   return (
     <div className="px-5 py-10 md:px-36">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Popular Places in England</h2>
+        <h2 className="text-2xl font-bold">Popular Places in France</h2>
         <button className="px-4 py-2 text-red-500 border border-red-500 rounded-lg hover:bg-red-500 hover:text-white">
           SEE ALL
         </button>
@@ -156,7 +159,7 @@ const PopularPlaces = () => {
                     <div className="absolute bottom-0 left-0 w-full text-white bg-transparent bg-opacity-50 px:20 md:p-4">
                       <h3 className="text-lg font-bold">{place.name}</h3>
                       <p className="text-sm">Amazing journey</p>
-                      <p className="text-lg font-semibold">${place.price}</p>
+                      <p className="text-lg font-semibold">€{place.price}</p>
                       <button onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
                         BOOK FLIGHT
                       </button>
@@ -208,7 +211,7 @@ const PopularPlaces = () => {
           </button>
         </div>
       ) : (
-        // Desktop Grid View (unchanged)
+        // Desktop Grid View
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           {places.map((place, index) => (
             <div key={index} className="relative overflow-hidden rounded-lg shadow-lg">
@@ -216,7 +219,7 @@ const PopularPlaces = () => {
               <div className="absolute bottom-0 left-0 w-full p-4 text-white bg-transparent bg-opacity-50">
                 <h3 className="text-lg font-bold">{place.name}</h3>
                 <p className="text-sm">Amazing journey</p>
-                <p className="text-lg font-semibold">${place.price}</p>
+                <p className="text-lg font-semibold">€{place.price}</p>
                 <button onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
                   BOOK FLIGHT
                 </button>

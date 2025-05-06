@@ -1,36 +1,15 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Globe from "globe.gl";
 import europeGeoJSON from "./geoJson.json"; // Import your Natural Earth GeoJSON file
-import FranceVideo from "/videos/France4.mp4";
-import GermanyVideo from "/videos/Germany4.mp4";
-import ItalyVideo from "/videos/Italy4.mp4";
-import SpainVideo from "/videos/Spain4.mp4";
+import PlacesVideo from "/videos/Places.mp4"; // Single video for continuous loop
 
 const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const globeRef = useRef(null);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const globeInstanceRef = useRef(null);
-  const [highlightedCountry, setHighlightedCountry] = useState(null);
-  
-  // Track both videos for crossfade
-  const currentVideoRef = useRef(null);
-  const nextVideoRef = useRef(null);
-  
-  // Define background videos for each country - NOT using useMemo to avoid stale references
-  const countryVideos = {
-    France: FranceVideo,
-    Germany: GermanyVideo,
-    Italy: ItalyVideo,
-    Spain: SpainVideo,
-  };
-  
-  // Default video
-  const defaultVideo = GermanyVideo;
-  const [activeVideoSrc, setActiveVideoSrc] = useState(defaultVideo);
-  const [previousVideoSrc, setPreviousVideoSrc] = useState(null);
-  const fadeAnimationRef = useRef(null);
-  const [videosLoaded, setVideosLoaded] = useState({ default: false });
+  const videoRef = useRef(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   // Define visible countries
   const visibleCountries = ["France", "Germany", "Spain", "Italy"];
@@ -111,14 +90,6 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     Italy: "rgba(0, 146, 70, 0.3)",   // Italian flag green
     Spain: "rgba(255, 196, 0, 0.3)"   // Spanish flag yellow
   };
-  
-  // For highlighted states, use secondary colors from the flags
-  const highlightedCountryColors = {
-    France: "rgba(237, 41, 57, 0.8)",  // French flag red
-    Germany: "rgba(255, 206, 0, 0.8)", // German flag gold
-    Italy: "rgba(206, 43, 55, 0.8)",   // Italian flag red
-    Spain: "rgba(198, 11, 30, 0.8)"    // Spanish flag red
-  };
 
   // Define country centroids for labels (approximate centers of countries)
   const countryCentroids = [
@@ -128,7 +99,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     { lat: 40.4637, lng: -2.7492, name: 'Spain', country: 'Spain' }
   ];
 
-  // Debounce function to prevent too many video transitions
+  // Debounce function to prevent too many operations during resize
   const debounce = useCallback((func, delay) => {
     let timerId;
     return (...args) => {
@@ -162,139 +133,32 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     return () => window.removeEventListener("resize", debouncedUpdateDimensions);
   }, [debounce]);
 
-  // Load default video immediately, then lazy load other videos
+  // Load and play the Places video
   useEffect(() => {
-    // First priority: Load and play default video immediately
-    if (currentVideoRef.current) {
-      currentVideoRef.current.src = defaultVideo;
-      currentVideoRef.current.load();
+    if (videoRef.current) {
+      videoRef.current.src = PlacesVideo;
+      videoRef.current.load();
       
-      // Listen for when default video starts playing
-      const handleDefaultLoaded = () => {
-        console.log("Default video loaded and playing");
-        setVideosLoaded(prev => ({ ...prev, default: true }));
-        
-        // Begin preloading other videos only after default video is playing
-        setTimeout(() => {
-          // Then preload other videos in the background with low priority
-          Object.entries(countryVideos).forEach(([country, videoSrc]) => {
-            if (videoSrc !== defaultVideo) {
-              console.log(`Background loading video for ${country}`);
-              const preloadVideo = document.createElement('video');
-              preloadVideo.preload = 'auto';
-              
-              // Use lower priority for non-default videos
-              if ('fetchPriority' in preloadVideo) {
-                preloadVideo.fetchPriority = 'low';
-              }
-              
-              preloadVideo.src = videoSrc;
-              
-              // Track when each country's video is loaded
-              preloadVideo.oncanplaythrough = () => {
-                console.log(`Video for ${country} is loaded and ready`);
-                setVideosLoaded(prev => ({ ...prev, [country]: true }));
-              };
-              
-              preloadVideo.load();
-            }
-          });
-        }, 100); // Small delay to ensure default video gets priority
+      // Listen for when video starts playing
+      const handleVideoLoaded = () => {
+        console.log("Places video loaded and playing");
+        setVideoLoaded(true);
       };
       
-      currentVideoRef.current.oncanplaythrough = handleDefaultLoaded;
-      const playPromise = currentVideoRef.current.play();
+      videoRef.current.oncanplaythrough = handleVideoLoaded;
+      const playPromise = videoRef.current.play();
       
       if (playPromise !== undefined) {
         playPromise
-          .then(() => console.log("Default video started playing"))
+          .then(() => console.log("Places video started playing"))
           .catch(e => {
             console.log("Video play prevented:", e);
             // Mark as loaded even if autoplay fails (user might need to interact first)
-            handleDefaultLoaded();
+            handleVideoLoaded();
           });
       }
     }
   }, []);
-
-  // Handle video transition with optimized animation
-  const handleVideoTransition = useCallback((newVideoSrc) => {
-    // Check if the requested video has been loaded
-    const requestedCountry = Object.keys(countryVideos).find(
-      country => countryVideos[country] === newVideoSrc
-    );
-    
-    // If the video isn't loaded yet, don't attempt transition
-    if (requestedCountry && !videosLoaded[requestedCountry] && newVideoSrc !== defaultVideo) {
-      console.log(`Video for ${requestedCountry} not loaded yet, staying with current video`);
-      return;
-    }
-    
-    console.log("handleVideoTransition called with:", newVideoSrc);
-    
-    // Cancel any ongoing animation
-    if (fadeAnimationRef.current) {
-      cancelAnimationFrame(fadeAnimationRef.current);
-    }
-
-    setPreviousVideoSrc(activeVideoSrc);
-    setActiveVideoSrc(newVideoSrc);
-    
-    if (nextVideoRef.current) {
-      // Explicit logging to debug video transitions
-      console.log("Setting next video source to:", newVideoSrc);
-      
-      nextVideoRef.current.src = newVideoSrc;
-      nextVideoRef.current.style.opacity = "0";
-      nextVideoRef.current.load();
-      
-      const playPromise = nextVideoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => console.log("Video started playing successfully"))
-          .catch(e => console.log("Video play prevented:", e));
-      }
-      
-      // Start transition with requestAnimationFrame
-      let start;
-      const duration = 600; // Even faster transition for better responsiveness
-      
-      function fadeAnimation(timestamp) {
-        if (!start) start = timestamp;
-        const elapsed = timestamp - start;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Fade out current video
-        if (currentVideoRef.current) {
-          currentVideoRef.current.style.opacity = 1 - progress;
-        }
-        
-        // Fade in next video
-        if (nextVideoRef.current) {
-          nextVideoRef.current.style.opacity = progress;
-        }
-        
-        if (progress < 1) {
-          fadeAnimationRef.current = requestAnimationFrame(fadeAnimation);
-        } else {
-          console.log("Fade animation complete");
-          // Swap references when animation completes
-          const temp = currentVideoRef.current;
-          currentVideoRef.current = nextVideoRef.current;
-          nextVideoRef.current = temp;
-          
-          // Reset next video opacity
-          if (nextVideoRef.current) {
-            nextVideoRef.current.style.opacity = "0";
-          }
-          
-          fadeAnimationRef.current = null;
-        }
-      }
-      
-      fadeAnimationRef.current = requestAnimationFrame(fadeAnimation);
-    }
-  }, [activeVideoSrc, countryVideos, defaultVideo, videosLoaded]);
 
   // Initialize globe once when component mounts
   useEffect(() => {
@@ -337,8 +201,8 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         .polygonSideColor(() => "rgba(189, 195, 199, 0.2)")
         .polygonStrokeColor(() => "rgba(236, 240, 241, 0.8)")
         .polygonsTransitionDuration(200)
-        .polygonCapColor((d) => countryColors[d.properties.name])
-        .polygonAltitude(() => 0.06);
+        .polygonCapColor((d) => countryColors[d.properties.name] || countryColors.Germany)
+        .polygonAltitude(() => 0.06); // Set all countries to the same altitude
       
       // Use HTML elements for country labels at centroids instead of capitals
       globe
@@ -365,10 +229,6 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     
     return () => {
       // Only clean up globe on component unmount
-      if (fadeAnimationRef.current) {
-        cancelAnimationFrame(fadeAnimationRef.current);
-      }
-      
       if (globeInstanceRef.current) {
         globeInstanceRef.current._destructor();
         globeInstanceRef.current = null;
@@ -376,92 +236,28 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     };
   }, []); // Empty dependency array means this runs only once on mount
   
-  // Set up event handlers separately to avoid recreating the globe
+  // Handle click events on countries
   useEffect(() => {
     if (!globeInstanceRef.current) return;
     
-    // Direct hover handler without debounce to ensure immediate response
-    const hoverHandler = (polygon) => {
-      if (polygon) {
-        const countryName = polygon.properties.name;
-        console.log("Hover detected on country:", countryName);
-        
-        // Get the correct video for this country
-        const videoSrc = countryVideos[countryName];
-        console.log("Video source for country:", videoSrc);
-        
-        // Only transition if video is loaded or it's the default video
-        const isVideoLoaded = videosLoaded[countryName] || videoSrc === defaultVideo;
-        if (videoSrc && videoSrc !== activeVideoSrc && isVideoLoaded) {
-          console.log("Transitioning to video:", videoSrc);
-          handleVideoTransition(videoSrc);
-        } else if (!isVideoLoaded) {
-          console.log(`Video for ${countryName} not loaded yet, showing loading state`);
-          // You could show a loading indicator here if needed
+    // Set up click handler for countries
+    globeInstanceRef.current.onPolygonClick((polygon) => {
+      if (polygon && polygon.properties) {
+        const country = polygon.properties.name;
+        const targetCity = cities?.find((city) => city.country === country);
+        if (targetCity && targetCity.url) {
+          window.open(targetCity.url, "_blank");
         }
-        
-        setHighlightedCountry(countryName);
-      } else {
-        // Mouse left a country, return to default
-        console.log("Exiting country, returning to default video");
-        if (activeVideoSrc !== defaultVideo) {
-          handleVideoTransition(defaultVideo);
-        }
-        setHighlightedCountry(null);
       }
-    };
-
-    // Set up event handlers
-    globeInstanceRef.current
-      .onPolygonHover(hoverHandler)
-      .onPolygonClick((polygon) => {
-        if (polygon && polygon.properties) {
-          const country = polygon.properties.name;
-          const targetCity = cities?.find((city) => city.country === country);
-          if (targetCity && targetCity.url) {
-            // window.open(targetCity.url, "_blank");
-          }
-        }
-      });
+    });
       
     return () => {
       // Clean up event handlers but don't destroy globe instance
       if (globeInstanceRef.current) {
-        globeInstanceRef.current.onPolygonHover(null);
         globeInstanceRef.current.onPolygonClick(null);
       }
     };
-  }, [cities, countryVideos, activeVideoSrc, defaultVideo, handleVideoTransition, videosLoaded]);
-
-  // Update only the styling properties when highlightedCountry changes
-  // This is in a separate useEffect to prevent recreating the globe
-  useEffect(() => {
-    if (!globeInstanceRef.current) return;
-    
-    // Use requestAnimationFrame to prevent jank during updates
-    // and to batch visual updates with browser's render cycle
-    requestAnimationFrame(() => {
-      if (!globeInstanceRef.current) return;
-      
-      const getCountryColor = (d) => {
-        if (!d || !d.properties || !d.properties.name) return countryColors.Germany; // Fallback
-        return highlightedCountry === d.properties.name
-          ? highlightedCountryColors[d.properties.name]
-          : countryColors[d.properties.name];
-      };
-  
-      const getCountryAltitude = (d) => {
-        if (!d || !d.properties || !d.properties.name) return 0.06; // Fallback
-        return d.properties.name === highlightedCountry ? 0.08 : 0.06;
-      };
-  
-      // Only update these specific properties, don't recreate polygons data
-      globeInstanceRef.current
-        .polygonCapColor(getCountryColor)
-        .polygonAltitude(getCountryAltitude);
-    });
-      
-  }, [highlightedCountry, countryColors, highlightedCountryColors]);
+  }, [cities]);
 
   // Force the globe to stay in position
   useEffect(() => {
@@ -508,57 +304,20 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       {/* Background placeholder to prevent grey flash */}
       <div className="absolute inset-0 z-0 bg-black"></div>
       
-      {/* First video (starts as active) */}
+      {/* Single video playing in loop */}
       <video
-        ref={currentVideoRef}
+        ref={videoRef}
         className="absolute inset-0 object-cover w-full h-full z-1"
         autoPlay
         loop
         muted
         playsInline
-        style={{ 
-          opacity: 1,
-          transition: "none", // We handle transition manually
-        }}
-      />
-      
-      {/* Second video (for crossfade) */}
-      <video
-        ref={nextVideoRef}
-        className="absolute inset-0 object-cover w-full h-full z-1"
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{ 
-          opacity: 0,
-          transition: "none", // We handle transition manually
-        }}
       />
 
-      {/* Loading indicator - show while default video is loading */}
-      {!videosLoaded.default && (
+      {/* Loading indicator - show while video is loading */}
+      {!videoLoaded && (
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <div className="text-lg text-white">Loading...</div>
-        </div>
-      )}
-
-      {/* Display current country name */}
-      {highlightedCountry && (
-        <div
-          className="absolute left-0 right-0 z-30 text-center top-5"
-          style={{
-            color: "#FFFFFF",
-            fontSize: "2rem",
-            fontWeight: "bold",
-            textShadow: "0 0 10px rgba(0, 0, 0, 0.8)"
-          }}
-        >
-          {highlightedCountry}
-          {/* Show loading indicator if video for this country isn't loaded yet */}
-          {highlightedCountry !== 'Germany' && !videosLoaded[highlightedCountry] && (
-            <span className="ml-2 text-sm opacity-70">(loading...)</span>
-          )}
         </div>
       )}
 
