@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Footer from '../../molecules/Footer'
 import Header from '../../molecules/Header'
 import HeroSection from '../../molecules/HeroImageComponent'
-import ContactUsImage from '../../../assets/images/ContactUs.png'
+import ContactUsImage from '../../../assets/images/ContactUs.jpg'
 import ContactForm from '../../molecules/ContactForm'
 import SubscribeSection from '../../molecules/SubscribeSection'
 import ResponsiveFooter from '../../molecules/ResponsiveFooter';
