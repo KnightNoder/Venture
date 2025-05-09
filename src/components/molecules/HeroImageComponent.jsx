@@ -6,8 +6,10 @@ const HeroSection = ({image, title, description }) => {
   const firstLine = words.slice(0, midIndex).join(" ");
   const secondLine = words.slice(midIndex).join(" ");
   const location = useLocation();
-  const isDestinationPage = location.pathname.includes('about')|| location.pathname.includes('destination') || location.search.includes('destination') || location.search.includes('about');
-  
+  const isAboutPage = location.pathname.includes('about')|| location.search.includes('about'); 
+  const isDestinationPage = location.pathname.includes('destination') || location.search.includes('destination') 
+  console.log(isAboutPage, isDestinationPage);
+    
 
   return (
     <div
@@ -22,9 +24,9 @@ const HeroSection = ({image, title, description }) => {
       {/* Content */}
       <div className="relative z-10">
         <h1 className="text-3xl font-bold w-full md:w-[800px] md:text-6xl">
-          {firstLine} 
+          {isDestinationPage ? `Travel to ${firstLine}` : firstLine} 
         </h1>
-        {!isDestinationPage && description && (
+        {(!isDestinationPage && !isAboutPage) && description && (
           <p className="mt-2 text-lg md:text-xl">{description}</p>
         )}
       </div>

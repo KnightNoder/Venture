@@ -69,6 +69,7 @@ const Header = () => {
 
           {/* Desktop Menu */}
           <ul className="hidden space-x-6 font-medium text-gray-700 text-md md:flex md:mr-12 lg:mr-48">
+            <li onClick={() => navigate('/')} className="cursor-pointer hover:text-blue-500">HOME</li>
             <li onClick={() => navigate('/about')} className="cursor-pointer hover:text-blue-500">ABOUT US</li>
             {/* <li className="flex items-center cursor-pointer hover:text-blue-500">
               OUR SERVICES
@@ -169,12 +170,21 @@ const Header = () => {
             <ul className="px-4 py-2 space-y-3 text-sm font-medium text-gray-700">
               <li 
                 onClick={() => {
+                  navigate('/');
+                  setMobileMenuOpen(false);
+                }} 
+                className="py-2 border-b border-gray-100 cursor-pointer hover:text-blue-500"
+              >
+                HOME
+              </li>
+              <li 
+                onClick={() => {
                   navigate('/about');
                   setMobileMenuOpen(false);
                 }} 
                 className="py-2 border-b border-gray-100 cursor-pointer hover:text-blue-500"
               >
-                ABOUT
+                ABOUT US
               </li>
               {/* <li className="flex items-center justify-between py-2 border-b border-gray-100 cursor-pointer hover:text-blue-500">
                 SERVICES
@@ -227,7 +237,15 @@ const Header = () => {
                   />
                 </svg>
               </li> */}
-              <li onClick={()=> navigate('/contact-us')} className="py-2 border-b border-gray-100 cursor-pointer hover:text-blue-500">CONTACT US</li>
+              <li 
+                onClick={() => {
+                  navigate('/contact-us');
+                  setMobileMenuOpen(false);
+                }} 
+                className="py-2 border-b border-gray-100 cursor-pointer hover:text-blue-500"
+              >
+                CONTACT US
+              </li>
               {/* <li className="py-2 cursor-pointer hover:text-blue-500">LUXURY</li> */}
             </ul>
             

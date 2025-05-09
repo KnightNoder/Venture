@@ -24,7 +24,7 @@ const Destination = () => {
       <HeroSection title={country} description={"Enjoy your holiday with us"} image={image} />
       <CountryOverview country={country}/>
       <HistoryAndCulture country={country}/>
-      <CountryFAQ/>
+      <CountryFAQ country={country}/>
       <TravelPage country={country}/>
       {/* <TravelSection title={country}/> */}
       <ResponsiveFooter/>
