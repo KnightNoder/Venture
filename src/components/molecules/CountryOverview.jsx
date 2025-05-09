@@ -10,11 +10,11 @@ import Travel4 from "../../assets/images/Travel4.png";
 import Icons from '../../assets/Icons/Icons';
 
 // Country Overview Component
-export const  CountryOverview = () => {
+export const  CountryOverview = ({country}) => {
   return (
-    <div className="flex flex-col px-2 mt-12 overflow-hidden shadow-lg md:mt-20 md:p-10 md:flex-row bg-red-50 md:mx-40 md:rounded-3xl">
+    <div className="h-[420px] flex flex-col px-2 mt-12 overflow-hidden shadow-lg md:mt-20 md:p-10 md:flex-row bg-red-50 md:mx-40 md:rounded-3xl">
       <div className="p-6 md:w-2/3">
-        <h2 className="text-2xl font-bold text-red-600">France</h2>
+        <h2 className="text-2xl font-bold text-red-600">Tourism at glance</h2>
         <p className="mt-3 leading-relaxed text-gray-700">
           France is a dream destination known for its rich culture, world-class cuisine, romantic cities, 
           and stunning landscapes. From the iconic Eiffel Tower to the glamorous French Riviera, France 
@@ -43,13 +43,13 @@ export const  CountryOverview = () => {
           </div>
         </div>
 
-        <h3 className="mt-5 text-xl font-bold text-black">Weather & Best Time to Visit</h3>
-        <p className="mt-3 leading-relaxed text-gray-700">
+        {/* <h3 className="mt-5 text-xl font-bold text-black">Weather & Best Time to Visit</h3> */}
+        {/* <p className="mt-3 leading-relaxed text-gray-700">
           France enjoys a temperate climate with distinct seasons. Winters (December-February) are cold to mild 
           with average temperatures between 3°C to 10°C. Summers (June-August) are warm and sunny with temperatures 
           ranging from 20°C to 30°C. The best time to visit is during spring (April-June) and autumn (September-October) 
           when the weather is pleasant and there are fewer crowds.
-        </p>
+        </p> */}
       </div>
       {/* Image section */}
       <div className="h-[250px] md:w-1/3 md:h-full">

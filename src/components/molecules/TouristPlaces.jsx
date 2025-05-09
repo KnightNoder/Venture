@@ -6,61 +6,64 @@ import Tourist3 from "../../assets/images/Tourist3.png";
 import Tourist4 from "../../assets/images/Tourist4.png";
 import Icons from '../../assets/Icons/Icons';
 
-const TouristAttractions = () => {
-  return (
-    <div className="flex flex-col px-8 py-10 bg-red-50 md:px-56 md:flex-row md:items-center">
-      {/* Left Content Section */}
-      <div className="md:w-1/2">
-        <h2 className="mb-4 text-3xl font-bold text-black">Tourist Attractions</h2>
-        <p className="mb-4 text-lg text-gray-700">
-          France is home to some of the world's most iconic landmarks and attractions, drawing millions of visitors 
-          each year. From magnificent architectural wonders to natural landscapes, here are some must-visit places:
-        </p>
-        <ul className="w-full space-y-3 list-none">
-          {[
-            "Eiffel Tower: The iconic symbol of Paris and France, offering panoramic views of the city.",
-            "Louvre Museum: Home to thousands of artworks including the famous Mona Lisa.",
-            "Mont-Saint-Michel: A magical island abbey off Normandy's coast with medieval architecture.",
-            "Palace of Versailles: Stunning royal residence with exquisite gardens and Hall of Mirrors.",
-            "French Riviera: Glamorous beaches and festivals in Nice, Cannes, and Saint-Tropez.",
-            "Loire Valley: Famous for its magnificent châteaux, vineyards, and scenic drives."
-          ].map((attraction, index) => (
-            <li key={index} className="flex gap-3">
-              {Icons && <Icons variant="left-marker" className="flex-shrink-0 w-6 h-6" />}
-              <span className="text-lg text-gray-700">{attraction}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Right Image Section */}
-      <div className="grid grid-cols-2 gap-12 mt-6 md:gap-2 md:mt-0 md:w-1/2 md:grid-cols-2 md:pl-12">
-        {[Tourist1, Tourist2, Tourist3, Tourist4].map((src, index) => (
-          <img
-            key={index}
-            src={src}
-            alt="France attraction"
-            className={`object-cover w-[200px] h-64 rounded-md shadow-md ${
-              index % 2 === 0 ? "mt-0" : "mt-6"
-            }`} // Zig-zag effect
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-
-
-
-const PopularPlaces = () => {
-  // Sample data for places in France
+const PopularPlaces = ({country}) => {
+  // Sample data for places in Andorra
   const navigate = useNavigate();
   const places = [
-    { name: "Paris", price: 600, image: Tourist1 },
-    { name: "Nice", price: 500, image: Tourist2 },
-    { name: "Bordeaux", price: 450, image: Tourist3 },
-    { name: "Lyon", price: 400, image: Tourist4 },
+    { 
+      name: "Grandvalira Ski Resort", 
+      description: "One of the largest ski areas in the Pyrenees", 
+      price: 580, 
+      image: Tourist1 
+    },
+    { 
+      name: "Vallnord-Pal Arinsal", 
+      description: "Popular for skiing, snowboarding, and mountain biking", 
+      price: 520, 
+      image: Tourist2 
+    },
+    { 
+      name: "Sant Joan de Caselles Church", 
+      description: "A stunning Romanesque church from the 11th century", 
+      price: 440, 
+      image: Tourist3 
+    },
+    { 
+      name: "Casa de la Vall", 
+      description: "Historic parliament building in Andorra la Vella", 
+      price: 460, 
+      image: Tourist4 
+    },
+    { 
+      name: "Caldea Spa", 
+      description: "One of Europe's largest mountain spas with thermal waters", 
+      price: 550, 
+      image: Tourist1 
+    },
+    { 
+      name: "Madriu-Perafita-Claror Valley", 
+      description: "UNESCO World Heritage Site for hiking and nature", 
+      price: 490, 
+      image: Tourist2 
+    },
+    { 
+      name: "Andorra la Vella", 
+      description: "Famous for duty-free shopping and charming city streets", 
+      price: 520, 
+      image: Tourist3 
+    },
+    { 
+      name: "Coma Pedrosa Natural Park", 
+      description: "Ideal for hiking and nature lovers", 
+      price: 460, 
+      image: Tourist4 
+    },
+    { 
+      name: "Tobotronc at Naturlandia", 
+      description: "The world's longest alpine toboggan run", 
+      price: 440, 
+      image: Tourist1 
+    }
   ];
 
   // State for tracking current slide in the carousel
@@ -125,10 +128,19 @@ const PopularPlaces = () => {
     }
   };
 
+  // For desktop view, show 4 places at a time in the carousel
+  const visiblePlaces = isMobile 
+    ? [places[currentSlide]] 
+    : places.slice(currentSlide, currentSlide + 4);
+  
+  const maxSlide = isMobile 
+    ? places.length - 1 
+    : Math.max(0, places.length - 4);
+
   return (
     <div className="px-5 py-10 md:px-36">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Popular Places in France</h2>
+        <h2 className="text-2xl font-bold">Popular Places in {country}</h2>
         <button className="px-4 py-2 text-red-500 border border-red-500 rounded-lg hover:bg-red-500 hover:text-white">
           SEE ALL
         </button>
@@ -138,39 +150,40 @@ const PopularPlaces = () => {
         we've got the travel tools to get you to your destination.
       </p>
 
-      {isMobile ? (
-        // Mobile Carousel View
-        <div className="relative">
+      {/* Carousel View (for both mobile and desktop) */}
+      <div className="relative">
+        <div 
+          ref={carouselRef}
+          className="overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div 
-            ref={carouselRef}
-            className="overflow-hidden"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            className="flex transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(-${isMobile ? currentSlide * 100 : (currentSlide * 25)}%)` }}
           >
-            <div 
-              className="flex transition-transform duration-300 ease-in-out"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-            >
-              {places.map((place, index) => (
-                <div key={index} className="flex-shrink-0 w-full">
-                  <div className="relative m-1 overflow-hidden rounded-lg shadow-lg">
-                    <img src={place.image} alt={place.name} className="object-cover w-full h-[500px] " />
-                    <div className="absolute bottom-0 left-0 w-full text-white bg-transparent bg-opacity-50 px:20 md:p-4">
-                      <h3 className="text-lg font-bold">{place.name}</h3>
-                      <p className="text-sm">Amazing journey</p>
-                      <p className="text-lg font-semibold">€{place.price}</p>
-                      <button onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
-                        BOOK FLIGHT
-                      </button>
-                    </div>
+            {places.map((place, index) => (
+              <div key={index} className={`flex-shrink-0 ${isMobile ? 'w-full' : 'w-1/4'} px-2`}>
+                <div className="relative m-1 overflow-hidden rounded-lg shadow-lg h-[400px] md:h-[500px]">
+                  <img src={place.image} alt={place.name} className="object-cover w-full h-full" />
+                  <div className="absolute bottom-0 left-0 w-full p-4 text-white bg-black bg-opacity-50">
+                    <h3 className="text-lg font-bold">{place.name}</h3>
+                    <p className="text-sm">{place.description}</p>
+                    <p className="mt-1 text-sm font-semibold text-yellow-300">3 days and 4 nights package</p>
+                    <p className="text-lg font-semibold">€{place.price}</p>
+                    <button onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
+                      BOOK NOW
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* Navigation dots */}
+        {/* Navigation dots (only for mobile) */}
+        {isMobile && (
           <div className="flex justify-center mt-4">
             {places.map((_, index) => (
               <button
@@ -183,64 +196,44 @@ const PopularPlaces = () => {
               />
             ))}
           </div>
+        )}
 
-          {/* Navigation arrows */}
-          <button
-            className={`absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 ${
-              currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
-            }`}
-            onClick={prevSlide}
-            disabled={currentSlide === 0}
-            aria-label="Previous slide"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            className={`absolute top-1/2 right-2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 ${
-              currentSlide === places.length - 1 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
-            }`}
-            onClick={nextSlide}
-            disabled={currentSlide === places.length - 1}
-            aria-label="Next slide"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      ) : (
-        // Desktop Grid View
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          {places.map((place, index) => (
-            <div key={index} className="relative overflow-hidden rounded-lg shadow-lg">
-              <img src={place.image} alt={place.name} className="object-cover w-full h-[300px] md:h-[600px]" />
-              <div className="absolute bottom-0 left-0 w-full p-4 text-white bg-transparent bg-opacity-50">
-                <h3 className="text-lg font-bold">{place.name}</h3>
-                <p className="text-sm">Amazing journey</p>
-                <p className="text-lg font-semibold">€{place.price}</p>
-                <button onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
-                  BOOK FLIGHT
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+        {/* Navigation arrows */}
+        <button
+          className={`absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 ${
+            currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+          }`}
+          onClick={prevSlide}
+          disabled={currentSlide === 0}
+          aria-label="Previous slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          className={`absolute top-1/2 right-2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 ${
+            currentSlide === maxSlide ? 'opacity-50 cursor-not-allowed' : 'opacity-100'
+          }`}
+          onClick={nextSlide}
+          disabled={currentSlide === maxSlide}
+          aria-label="Next slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 };
 
-
-const TravelPage = () => {
+const TravelPage = ({country}) => {
   return (
     <div>
-      <TouristAttractions />
-      <PopularPlaces />
+      <PopularPlaces country={country} />
     </div>
   );
 };
 
 export default TravelPage;
-

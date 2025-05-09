@@ -8,7 +8,8 @@ import TravelSection from '../../molecules/TravelSection';
 import Footer from '../../molecules/Footer';
 import CountryOverview from '../../molecules/CountryOverview';
 import HistoryAndCulture from '../../molecules/HistoryAndCulture';
-import image from "../../../assets/images/EnglandCover.png";
+import CountryFAQ from '../../molecules/CountryFAQ';
+import image from "../../../assets/images/Italy.avif";
 import DesktopTabletFooter from '../../molecules/DesktopFooter';
 import ResponsiveFooter from '../../molecules/ResponsiveFooter';
 
@@ -20,11 +21,12 @@ const Destination = () => {
   return (
     <>
       <Header/>
-      <HeroSection title={"Services"} description={"Enjoy your holiday with us"} image={image} />
-      <CountryOverview/>
-      <HistoryAndCulture/>
-      <TravelPage/>
-      <TravelSection title={country}/>
+      <HeroSection title={country} description={"Enjoy your holiday with us"} image={image} />
+      <CountryOverview country={country}/>
+      <HistoryAndCulture country={country}/>
+      <CountryFAQ/>
+      <TravelPage country={country}/>
+      {/* <TravelSection title={country}/> */}
       <ResponsiveFooter/>
     </>
   )
