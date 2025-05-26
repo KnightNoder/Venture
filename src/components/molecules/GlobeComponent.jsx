@@ -11,8 +11,13 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const videoRef = useRef(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
-  // Define visible countries
-  const visibleCountries = ["France", "Germany", "Spain", "Italy"];
+  // Define visible countries - expanded to include all requested European countries
+  const visibleCountries = [
+    "France", "Germany", "Spain", "Italy", // Original countries
+    "Liechtenstein", "Luxembourg", "Malta", "Monaco", "Montenegro", 
+    "Netherlands", "Norway", "Portugal", "Slovakia", "Slovenia", 
+    "Sweden", "Switzerland", "United Kingdom", "Vatican City"
+  ];
 
   const processEuropeanTerritories = useCallback((features) => {
     const getCountryName = (feature) =>
@@ -83,20 +88,54 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     });
   }, [visibleCountries]);
 
-  // Define country-specific colors - using constants to avoid recreating objects
+  // Define country-specific colors - expanded with colors for all countries
   const countryColors = { 
-    France: "rgba(0, 35, 149, 0.3)",  // French flag blue
-    Germany: "rgba(221, 0, 0, 0.3)",  // German flag red
-    Italy: "rgba(0, 146, 70, 0.3)",   // Italian flag green
-    Spain: "rgba(255, 196, 0, 0.3)"   // Spanish flag yellow
+    // Original countries
+    France: "rgba(0, 35, 149, 0.3)",      // French flag blue
+    Germany: "rgba(221, 0, 0, 0.3)",      // German flag red
+    Italy: "rgba(0, 146, 70, 0.3)",       // Italian flag green
+    Spain: "rgba(255, 196, 0, 0.3)",      // Spanish flag yellow
+    
+    // New countries with distinctive colors
+    Liechtenstein: "rgba(0, 51, 160, 0.3)", // Blue
+    Luxembourg: "rgba(237, 41, 57, 0.3)",    // Red
+    Malta: "rgba(206, 17, 38, 0.3)",        // Maltese red
+    Monaco: "rgba(206, 17, 38, 0.3)",       // Monaco red
+    Montenegro: "rgba(196, 30, 58, 0.3)",   // Montenegro red
+    Netherlands: "rgba(255, 94, 77, 0.3)",  // Dutch orange
+    Norway: "rgba(186, 12, 47, 0.3)",       // Norwegian red
+    Portugal: "rgba(255, 0, 0, 0.3)",       // Portuguese red
+    Slovakia: "rgba(0, 82, 136, 0.3)",      // Slovak blue
+    Slovenia: "rgba(0, 82, 147, 0.3)",      // Slovenian blue
+    Sweden: "rgba(0, 106, 167, 0.3)",       // Swedish blue
+    Switzerland: "rgba(218, 41, 28, 0.3)",  // Swiss red
+    "United Kingdom": "rgba(1, 33, 105, 0.3)", // UK blue
+    "Vatican City": "rgba(255, 204, 0, 0.3)" // Vatican gold
   };
 
-  // Define country centroids for labels (approximate centers of countries)
+  // Define country centroids for labels - expanded with all countries
   const countryCentroids = [
+    // Original countries
     { lat: 46.0034, lng: 2.8883, name: 'France', country: 'France' },
     { lat: 50.0657, lng: 9.4515, name: 'Germany', country: 'Germany' },
     { lat: 42.5047, lng: 12.5674, name: 'Italy', country: 'Italy' },
-    { lat: 40.4637, lng: -2.7492, name: 'Spain', country: 'Spain' }
+    { lat: 40.4637, lng: -2.7492, name: 'Spain', country: 'Spain' },
+    
+    // New countries
+    { lat: 47.1660, lng: 9.5554, name: 'Liechtenstein', country: 'Liechtenstein' },
+    { lat: 49.8153, lng: 6.1296, name: 'Luxembourg', country: 'Luxembourg' },
+    { lat: 35.9375, lng: 14.3754, name: 'Malta', country: 'Malta' },
+    { lat: 43.7384, lng: 7.4246, name: 'Monaco', country: 'Monaco' },
+    { lat: 42.7087, lng: 19.3744, name: 'Montenegro', country: 'Montenegro' },
+    { lat: 52.1326, lng: 5.2913, name: 'Netherlands', country: 'Netherlands' },
+    { lat: 60.4720, lng: 8.4689, name: 'Norway', country: 'Norway' },
+    { lat: 39.3999, lng: -8.2245, name: 'Portugal', country: 'Portugal' },
+    { lat: 48.6690, lng: 19.6990, name: 'Slovakia', country: 'Slovakia' },
+    { lat: 46.1512, lng: 14.9955, name: 'Slovenia', country: 'Slovenia' },
+    { lat: 60.1282, lng: 18.6435, name: 'Sweden', country: 'Sweden' },
+    { lat: 46.8182, lng: 8.2275, name: 'Switzerland', country: 'Switzerland' },
+    { lat: 55.3781, lng: -3.4360, name: 'United Kingdom', country: 'United Kingdom' },
+    { lat: 41.9029, lng: 12.4534, name: 'Vatican City', country: 'Vatican City' }
   ];
 
   // Debounce function to prevent too many operations during resize
@@ -173,7 +212,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       const isMobile = window.innerWidth < 768;
       const europeView = isMobile 
         ? { lat: 38, lng: 5, altitude: 0.75 }  // Mobile view
-        : { lat: 44, lng: 10, altitude: 0.75 }; // Desktop/tablet view
+        : { lat: 10, lng: 90, altitude: 0.75 }; // Desktop/tablet view
   
       // Customize the globe appearance - minimal settings for better performance
       globe
@@ -270,7 +309,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       const isMobile = window.innerWidth < 768;
       const europeView = isMobile 
         ? { lat: 38, lng: 5, altitude: .75 }  // Mobile view
-        : { lat: 43, lng: 10, altitude: .75 }; // Desktop/tablet view
+        : { lat: 55, lng: 10, altitude: 1.1 }; // Desktop/tablet view
       
       if (globeInstanceRef.current) {
         globeInstanceRef.current.pointOfView(europeView, 0);

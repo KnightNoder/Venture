@@ -1,7 +1,24 @@
 import React from 'react';
-import Tourist2 from "../../assets/images/Tourist2.png"; // You can choose any image that fits FAQs
+import Tourist2 from "../../assets/images/Tourist2.png";
+import { tourismData } from './tourismData';
 
-const CountryFAQ = ({country}) => {
+const  CountryFAQ = ({ country }) => {
+  // Find the country data
+  const countryData = tourismData.find(data => 
+    data.country.toLowerCase() === country?.toLowerCase()
+  );
+
+  // Fallback if country not found
+  if (!countryData) {
+    return (
+      <div className="p-6 text-center">
+        <p>FAQ information not available for {country}</p>
+      </div>
+    );
+  }
+
+  const { faq } = countryData;
+
   return (
     <div className="flex flex-col h-auto px-2 mt-12 mb-20 overflow-hidden shadow-lg md:mt-20 md:p-10 md:flex-row bg-red-50 md:mx-40 md:rounded-3xl">
       {/* Left content section */}
@@ -13,22 +30,12 @@ const CountryFAQ = ({country}) => {
           <div>
             <h3 className="text-xl font-semibold text-black">Famous For:</h3>
             <ul className="grid grid-cols-1 gap-2 mt-2 md:grid-cols-2">
-              <li className="flex items-start">
-                <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">Duty-free shopping</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">Skiing resorts (like Grandvalira)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">Mountain trails</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">Romanesque architecture</span>
-              </li>
+              {faq.famousFor.map((item, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="mr-2 font-bold text-blue-600">•</span>
+                  <span className="font-medium text-gray-700">{item}</span>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -38,11 +45,7 @@ const CountryFAQ = ({country}) => {
             <ul className="mt-2 space-y-2">
               <li className="flex items-start">
                 <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">No visa needed for EU citizens</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">Schengen visa accepted for others</span>
+                <span className="font-medium text-gray-700">{faq.entryRequirements}</span>
               </li>
             </ul>
           </div>
@@ -55,7 +58,7 @@ const CountryFAQ = ({country}) => {
               <ul className="mt-2 space-y-2">
                 <li className="flex items-start">
                   <span className="mr-2 font-bold text-blue-600">•</span>
-                  <span className="font-medium text-gray-700">Not mandatory, but 5–10% appreciated</span>
+                  <span className="font-medium text-gray-700">{faq.tipping}</span>
                 </li>
               </ul>
             </div>
@@ -66,11 +69,15 @@ const CountryFAQ = ({country}) => {
               <ul className="mt-2 space-y-2">
                 <li className="flex items-start">
                   <span className="mr-2 font-bold text-blue-600">•</span>
-                  <span className="font-medium text-gray-700">Winter: Snowy, -2°C to 5°C</span>
+                  <span className="font-medium text-gray-700">
+                    Winter ({faq.weather.winter.months}): {faq.weather.winter.description} ({faq.weather.winter.temperature})
+                  </span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 font-bold text-blue-600">•</span>
-                  <span className="font-medium text-gray-700">Summer: Mild, 14°C to 24°C</span>
+                  <span className="font-medium text-gray-700">
+                    Summer ({faq.weather.summer.months}): {faq.weather.summer.description} ({faq.weather.summer.temperature})
+                  </span>
                 </li>
               </ul>
             </div>
@@ -82,11 +89,15 @@ const CountryFAQ = ({country}) => {
             <ul className="mt-2 space-y-2">
               <li className="flex items-start">
                 <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">Winter (Dec–March) for skiing in the Pyrenees</span>
+                <span className="font-medium text-gray-700">
+                  Winter: {faq.bestTimeToVisit.winter}
+                </span>
               </li>
               <li className="flex items-start">
                 <span className="mr-2 font-bold text-blue-600">•</span>
-                <span className="font-medium text-gray-700">Summer (June–Sept) for hiking, shopping, and festivals</span>
+                <span className="font-medium text-gray-700">
+                  Spring/Summer: {faq.bestTimeToVisit.springSummer}
+                </span>
               </li>
             </ul>
           </div>

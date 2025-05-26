@@ -4,97 +4,42 @@ import Tourist1 from "../../assets/images/Tourist1.png";
 import Tourist2 from "../../assets/images/Tourist2.png";
 import Tourist3 from "../../assets/images/Tourist3.png";
 import Tourist4 from "../../assets/images/Tourist4.png";
-import Icons from '../../assets/Icons/Icons';
+import { tourismData } from './tourismData';
 
-const PopularPlaces = ({country}) => {
-  // Sample data for places in Andorra
+const PopularPlaces = ({ country }) => {
   const navigate = useNavigate();
-  const places = [
-    { 
-      name: "Grandvalira Ski Resort", 
-      description: "One of the largest ski areas in the Pyrenees", 
-      price: 580, 
-      image: Tourist1 
-    },
-    { 
-      name: "Vallnord-Pal Arinsal", 
-      description: "Popular for skiing, snowboarding, and mountain biking", 
-      price: 520, 
-      image: Tourist2 
-    },
-    { 
-      name: "Sant Joan de Caselles Church", 
-      description: "A stunning Romanesque church from the 11th century", 
-      price: 440, 
-      image: Tourist3 
-    },
-    { 
-      name: "Casa de la Vall", 
-      description: "Historic parliament building in Andorra la Vella", 
-      price: 460, 
-      image: Tourist4 
-    },
-    { 
-      name: "Caldea Spa", 
-      description: "One of Europe's largest mountain spas with thermal waters", 
-      price: 550, 
-      image: Tourist1 
-    },
-    { 
-      name: "Madriu-Perafita-Claror Valley", 
-      description: "UNESCO World Heritage Site for hiking and nature", 
-      price: 490, 
-      image: Tourist2 
-    },
-    { 
-      name: "Andorra la Vella", 
-      description: "Famous for duty-free shopping and charming city streets", 
-      price: 520, 
-      image: Tourist3 
-    },
-    { 
-      name: "Coma Pedrosa Natural Park", 
-      description: "Ideal for hiking and nature lovers", 
-      price: 460, 
-      image: Tourist4 
-    },
-    { 
-      name: "Tobotronc at Naturlandia", 
-      description: "The world's longest alpine toboggan run", 
-      price: 440, 
-      image: Tourist1 
-    }
-  ];
+  
+  // Find the country data
+  const countryData = tourismData.find(data => 
+    data.country.toLowerCase() === country?.toLowerCase()
+  );
 
-  // State for tracking current slide in the carousel
+  // Create places array from attractions data with sample images and prices
+  const places = countryData ? countryData.popularAttractions.map((attraction, index) => ({
+    name: attraction.name,
+    description: attraction.description,
+    price: 440 + (index * 20), // Generate varied prices
+    image: [Tourist1, Tourist2, Tourist3, Tourist4][index % 4] // Cycle through images
+  })) : [];
+
+  // Rest of your existing state and logic remains the same
   const [currentSlide, setCurrentSlide] = useState(0);
-  // State to determine if we're on mobile view
   const [isMobile, setIsMobile] = useState(false);
-  // Reference to the carousel container for touch events
   const carouselRef = useRef(null);
-  // For tracking touch positions
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-  // Check if we're on mobile view when component mounts
   useEffect(() => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
     
-    // Initial check
     checkIsMobile();
-    
-    // Add resize listener
     window.addEventListener('resize', checkIsMobile);
-    
-    // Clean up event listener
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
-  // Handle slide navigation
   const goToSlide = (index) => {
-    // Make sure index stays within bounds
     const newIndex = Math.max(0, Math.min(index, places.length - 1));
     setCurrentSlide(newIndex);
   };
@@ -107,7 +52,6 @@ const PopularPlaces = ({country}) => {
     goToSlide(currentSlide - 1);
   };
 
-  // Touch event handlers for swipe functionality
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
@@ -118,17 +62,13 @@ const PopularPlaces = ({country}) => {
 
   const handleTouchEnd = () => {
     if (touchStart - touchEnd > 50) {
-      // Swipe left, go to next slide
       nextSlide();
     }
-
     if (touchStart - touchEnd < -50) {
-      // Swipe right, go to previous slide
       prevSlide();
     }
   };
 
-  // For desktop view, show 4 places at a time in the carousel
   const visiblePlaces = isMobile 
     ? [places[currentSlide]] 
     : places.slice(currentSlide, currentSlide + 4);
@@ -136,6 +76,15 @@ const PopularPlaces = ({country}) => {
   const maxSlide = isMobile 
     ? places.length - 1 
     : Math.max(0, places.length - 4);
+
+  // Fallback if country not found
+  if (!countryData) {
+    return (
+      <div className="p-6 text-center">
+        <p>Places information not available for {country}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="px-5 py-10 md:px-36">
@@ -150,7 +99,7 @@ const PopularPlaces = ({country}) => {
         we've got the travel tools to get you to your destination.
       </p>
 
-      {/* Carousel View (for both mobile and desktop) */}
+      {/* Carousel View */}
       <div className="relative">
         <div 
           ref={carouselRef}
@@ -172,7 +121,10 @@ const PopularPlaces = ({country}) => {
                     <p className="text-sm">{place.description}</p>
                     <p className="mt-1 text-sm font-semibold text-yellow-300">3 days and 4 nights package</p>
                     <p className="text-lg font-semibold">€{place.price}</p>
-                    <button onClick={()=> navigate('/contact-us')} className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white">
+                    <button 
+                      onClick={() => navigate('/contact-us')} 
+                      className="w-full py-2 mt-2 font-bold text-red-600 bg-white rounded-lg hover:bg-red-600 hover:text-white"
+                    >
                       BOOK NOW
                     </button>
                   </div>
@@ -228,7 +180,7 @@ const PopularPlaces = ({country}) => {
   );
 };
 
-const TravelPage = ({country}) => {
+const TravelPage = ({ country }) => {
   return (
     <div>
       <PopularPlaces country={country} />
