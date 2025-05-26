@@ -11,12 +11,13 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   const videoRef = useRef(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
-  // Define visible countries - expanded to include all requested European countries
+  // Define all 30 European countries from your tourism data
   const visibleCountries = [
-    "France", "Germany", "Spain", "Italy", // Original countries
-    "Liechtenstein", "Luxembourg", "Malta", "Monaco", "Montenegro", 
-    "Netherlands", "Norway", "Portugal", "Slovakia", "Slovenia", 
-    "Sweden", "Switzerland", "United Kingdom", "Vatican City"
+    "Andorra", "Austria", "Belgium", "Croatia", "Cyprus", "Czechia", "Czech Republic",
+    "Denmark", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", 
+    "Ireland", "Italy", "Liechtenstein", "Luxembourg", "Malta", "Monaco", 
+    "Montenegro", "Netherlands", "Norway", "Portugal", "Slovakia", "Slovenia", 
+    "Spain", "Sweden", "Switzerland", "United Kingdom", "Vatican City"
   ];
 
   const processEuropeanTerritories = useCallback((features) => {
@@ -30,7 +31,9 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     // First filter for countries we want to display
     let filteredFeatures = features.filter((feature) => {
       const countryName = getCountryName(feature);
-      return visibleCountries.includes(countryName);
+      // Handle different naming conventions in GeoJSON
+      return visibleCountries.includes(countryName) || 
+             (countryName === "Czech Republic" && visibleCountries.includes("Czechia"));
     });
     
     // Process each feature - special handling for France
@@ -77,7 +80,12 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     
     // Transform to the format needed for globe.gl
     return processedFeatures.map((feature) => {
-      const countryName = getCountryName(feature);
+      let countryName = getCountryName(feature);
+      // Normalize Czech Republic to Czechia for consistency
+      if (countryName === "Czech Republic") {
+        countryName = "Czechia";
+      }
+      
       return {
         properties: {
           name: countryName,
@@ -88,7 +96,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     });
   }, [visibleCountries]);
 
-  // Define country-specific colors - expanded with colors for all countries
+  // Define country-specific colors for all 30 countries
   const countryColors = { 
     // Original countries
     France: "rgba(0, 35, 149, 0.3)",      // French flag blue
@@ -96,7 +104,20 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     Italy: "rgba(0, 146, 70, 0.3)",       // Italian flag green
     Spain: "rgba(255, 196, 0, 0.3)",      // Spanish flag yellow
     
-    // New countries with distinctive colors
+    // All 30 European countries with distinctive colors
+    Andorra: "rgba(0, 102, 204, 0.3)",      // Blue
+    Austria: "rgba(237, 41, 57, 0.3)",      // Austrian red
+    Belgium: "rgba(255, 204, 0, 0.3)",      // Belgian yellow
+    Croatia: "rgba(255, 0, 0, 0.3)",        // Croatian red
+    Cyprus: "rgba(0, 123, 191, 0.3)",       // Cyprus blue
+    Czechia: "rgba(215, 20, 26, 0.3)",      // Czech red
+    "Czech Republic": "rgba(215, 20, 26, 0.3)", // Fallback
+    Denmark: "rgba(198, 12, 48, 0.3)",      // Danish red
+    Finland: "rgba(0, 83, 155, 0.3)",       // Finnish blue
+    Greece: "rgba(13, 94, 175, 0.3)",       // Greek blue
+    Hungary: "rgba(205, 42, 62, 0.3)",      // Hungarian red
+    Iceland: "rgba(0, 82, 156, 0.3)",       // Icelandic blue
+    Ireland: "rgba(0, 155, 72, 0.3)",       // Irish green
     Liechtenstein: "rgba(0, 51, 160, 0.3)", // Blue
     Luxembourg: "rgba(237, 41, 57, 0.3)",    // Red
     Malta: "rgba(206, 17, 38, 0.3)",        // Maltese red
@@ -113,15 +134,24 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     "Vatican City": "rgba(255, 204, 0, 0.3)" // Vatican gold
   };
 
-  // Define country centroids for labels - expanded with all countries
+  // Define country centroids for labels - all 30 countries
   const countryCentroids = [
-    // Original countries
-    { lat: 46.0034, lng: 2.8883, name: 'France', country: 'France' },
-    { lat: 50.0657, lng: 9.4515, name: 'Germany', country: 'Germany' },
-    { lat: 42.5047, lng: 12.5674, name: 'Italy', country: 'Italy' },
-    { lat: 40.4637, lng: -2.7492, name: 'Spain', country: 'Spain' },
-    
-    // New countries
+    // All 30 European countries with their centroids
+    { lat: 42.5063, lng: 1.5218, name: 'Andorra', country: 'Andorra' },
+    { lat: 47.5162, lng: 14.5501, name: 'Austria', country: 'Austria' },
+    { lat: 50.5039, lng: 4.4699, name: 'Belgium', country: 'Belgium' },
+    { lat: 45.1000, lng: 15.2000, name: 'Croatia', country: 'Croatia' },
+    { lat: 35.1264, lng: 33.4299, name: 'Cyprus', country: 'Cyprus' },
+    { lat: 49.8175, lng: 15.4730, name: 'Czechia', country: 'Czechia' },
+    { lat: 56.2639, lng: 9.5018, name: 'Denmark', country: 'Denmark' },
+    { lat: 61.9241, lng: 25.7482, name: 'Finland', country: 'Finland' },
+    { lat: 46.2276, lng: 2.2137, name: 'France', country: 'France' },
+    { lat: 51.1657, lng: 10.4515, name: 'Germany', country: 'Germany' },
+    { lat: 39.0742, lng: 21.8243, name: 'Greece', country: 'Greece' },
+    { lat: 47.1625, lng: 19.5033, name: 'Hungary', country: 'Hungary' },
+    { lat: 64.9631, lng: -19.0208, name: 'Iceland', country: 'Iceland' },
+    { lat: 53.4129, lng: -8.2439, name: 'Ireland', country: 'Ireland' },
+    { lat: 41.8719, lng: 12.5674, name: 'Italy', country: 'Italy' },
     { lat: 47.1660, lng: 9.5554, name: 'Liechtenstein', country: 'Liechtenstein' },
     { lat: 49.8153, lng: 6.1296, name: 'Luxembourg', country: 'Luxembourg' },
     { lat: 35.9375, lng: 14.3754, name: 'Malta', country: 'Malta' },
@@ -132,6 +162,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     { lat: 39.3999, lng: -8.2245, name: 'Portugal', country: 'Portugal' },
     { lat: 48.6690, lng: 19.6990, name: 'Slovakia', country: 'Slovakia' },
     { lat: 46.1512, lng: 14.9955, name: 'Slovenia', country: 'Slovenia' },
+    { lat: 40.4637, lng: -3.7492, name: 'Spain', country: 'Spain' },
     { lat: 60.1282, lng: 18.6435, name: 'Sweden', country: 'Sweden' },
     { lat: 46.8182, lng: 8.2275, name: 'Switzerland', country: 'Switzerland' },
     { lat: 55.3781, lng: -3.4360, name: 'United Kingdom', country: 'United Kingdom' },
@@ -211,7 +242,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       // Set focused view on Europe based on device size
       const isMobile = window.innerWidth < 768;
       const europeView = isMobile 
-        ? { lat: 38, lng: 5, altitude: 0.75 }  // Mobile view
+        ? { lat: 30, lng: -20, altitude: 2 }  // Mobile view
         : { lat: 10, lng: 90, altitude: 0.75 }; // Desktop/tablet view
   
       // Customize the globe appearance - minimal settings for better performance
@@ -308,8 +339,8 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
     const updateViewByDevice = () => {
       const isMobile = window.innerWidth < 768;
       const europeView = isMobile 
-        ? { lat: 38, lng: 5, altitude: .75 }  // Mobile view
-        : { lat: 55, lng: 10, altitude: 1.1 }; // Desktop/tablet view
+        ? { lat: 54, lng: 5, altitude: 1.1 }  // Mobile view
+        : { lat: 62, lng: 10, altitude: 1.1 }; // Desktop/tablet view
       
       if (globeInstanceRef.current) {
         globeInstanceRef.current.pointOfView(europeView, 0);
@@ -334,11 +365,10 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
   return (
     <div 
       ref={containerRef} 
-      className="relative w-full overflow-hidden" 
       style={{ 
-        height: dimensions.height,
         backgroundColor: "rgba(0,0,0,1)" // Black background to prevent any grey flash
       }}
+      className={`relative w-full overflow-hidden h-[700] md:${dimensions.height}px`}
     >
       {/* Background placeholder to prevent grey flash */}
       <div className="absolute inset-0 z-0 bg-black"></div>
@@ -366,7 +396,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
         className="relative z-20"
         style={{
           width: "100%",
-          height: "100%",
+          height: "200%",
           maxWidth: "100vw",
           // Allow pointer events for country clicks
           pointerEvents: "auto" 
