@@ -368,7 +368,7 @@ const GlobeComponent = ({ cities, continent = "Europe" }) => {
       style={{ 
         backgroundColor: "rgba(0,0,0,1)" // Black background to prevent any grey flash
       }}
-      className={`relative w-full overflow-hidden h-[700] md:${dimensions.height}px`}
+      className={`relative w-full overflow-hidden h-[1000] md:${dimensions.height}px`}
     >
       {/* Background placeholder to prevent grey flash */}
       <div className="absolute inset-0 z-0 bg-black"></div>
